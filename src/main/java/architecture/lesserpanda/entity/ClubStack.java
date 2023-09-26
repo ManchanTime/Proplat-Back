@@ -18,6 +18,6 @@ public class ClubStack {
     private Club club;
 
     @ManyToOne
-    @JoinColumn(name = "tach_stack_id")
+    @JoinColumn(name = "tech_stack_id")
     private TechStack techStack;
 }

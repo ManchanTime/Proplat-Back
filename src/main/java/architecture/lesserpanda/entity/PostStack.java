@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 public class PostStack {
 
     @Id @GeneratedValue
-    @Column(name = "post_Stack_id")
+    @Column(name = "post_stack_id")
     private Long id;
 
     @ManyToOne

@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:h2:tcp://localhost/~/lesserpanda
+    username: sa
+    password: 1
+    driver-class-name: org.h2.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        #show_sql: true
+        format_sql: true
+        default_batch_fetch_size: 1000 #최적화 옵션
+
+# 애초에 memory가 디폴트라 위 코드 없어도 됨!!
+# ddl-auto는 디폴트가 create-droㄴp -> 프로그램 종료 시 모든 생성 테이블을 드랍해버림
+
+logging.level:
+  org.hibernate.SQL: debug
+  org.hibernate.orm.jdbc.bind: trace

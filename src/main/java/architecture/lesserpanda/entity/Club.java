@@ -22,6 +22,6 @@ public class Club {
     private String content;
     private String url;
 
-    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
-    private List<ClubStack> clubStackList;
+//    @OneToMany(mappedBy = "club", fetch = FetchType.LAZY)
+//    private List<ClubStack> clubStackList;
 }
