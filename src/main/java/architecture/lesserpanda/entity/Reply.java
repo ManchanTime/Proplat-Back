@@ -19,10 +19,10 @@ public class Reply {
     private LocalDateTime date;
 
     @ManyToOne
-    @Column(name = "post_id")
+    @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne
-    @Column(name = "reply_id")
-    private Reply reply;
+//    @ManyToOne
+//    @JoinColumn(name = "reply_id")
+//    private Reply reply;
 }

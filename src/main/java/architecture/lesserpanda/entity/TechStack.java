@@ -17,12 +17,12 @@ public class TechStack {
 
     private String name;
 
-//    @OneToMany(mappedBy = "techStack", fetch = FetchType.LAZY)
-//    private List<ClubStack> clubStackList;
-//
-//    @OneToMany(mappedBy = "techStack", fetch = FetchType.LAZY)
-//    private List<UserStack> userStackList;
-//
-//    @OneToMany(mappedBy = "techStack", fetch = FetchType.LAZY)
-//    private List<PostStack> postStackList;
+    @OneToMany(mappedBy = "techStack", fetch = FetchType.LAZY)
+    private List<ClubStack> clubStackList;
+
+    @OneToMany(mappedBy = "techStack", fetch = FetchType.LAZY)
+    private List<UserStack> userStackList;
+
+    @OneToMany(mappedBy = "techStack", fetch = FetchType.LAZY)
+    private List<PostStack> postStackList;
 }
