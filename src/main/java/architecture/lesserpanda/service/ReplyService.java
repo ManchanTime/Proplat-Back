@@ -1,6 +1,8 @@
 package architecture.lesserpanda.service;
 
+import architecture.lesserpanda.entity.Post;
 import architecture.lesserpanda.entity.Reply;
+import architecture.lesserpanda.repository.PostRepository;
 import architecture.lesserpanda.repository.ReplyRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,9 +16,12 @@ import java.util.List;
 public class ReplyService {
 
     private final ReplyRepository replyRepository;
+    private final PostRepository postRepository;
 
     @Transactional
-    public Long saveReply(Reply reply){
+    public Long saveReply(Reply reply, Long postId){
+        Post post = postRepository.findById(postId);
+        reply.createReply(post);
         replyRepository.save(reply);
         return reply.getId();
     }

@@ -51,15 +51,15 @@ public class Reply {
     /**
      * 대댓글 작성
      */
-    public void addChildReply(Reply child){
-        this.child.add(child);
-        child.setParent(this);
+    public void createRereply(Reply parent){
+        this.parent = parent;
+        parent.getChild().add(this);
     }
 
     /**
      * Post에 댓글 추가
      */
-    public void addReply(Post post){
+    public void createReply(Post post){
         this.post = post;
         post.getReplyList().add(this);
     }

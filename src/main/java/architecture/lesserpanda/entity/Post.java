@@ -34,6 +34,12 @@ public class Post {
         this.title = title;
     }
 
+    //==연관 관계 생성 메서드==//
+    public void createPost(User user){
+        this.user = user;
+        user.getUserPostList().add(this);
+    }
+
     public Post(String title, String content, Boolean complete, LocalDateTime date, User user) {
         this.title = title;
         this.content = content;
@@ -50,4 +56,6 @@ public class Post {
         this.image = image;
         this.user = user;
     }
+
+
 }

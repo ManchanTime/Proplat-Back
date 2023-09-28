@@ -46,13 +46,13 @@ class ReplyRepositoryTest {
     }
 
     @Test
-    void child(){
+    void createRereply(){
         Reply reply = new Reply("reply");
         replyRepository.save(reply);
 
         Reply rereply = new Reply("rereply");
 
-        reply.addChildReply(rereply);
+        reply.createRereply(rereply);
         replyRepository.save(rereply);
 
         List<Reply> resultList = em.createQuery("select r from Reply r join r.child c", Reply.class)
@@ -62,12 +62,12 @@ class ReplyRepositoryTest {
     }
 
     @Test
-    void addReply(){
+    void createReply(){
         Post post = new Post("post");
         postRepository.save(post);
 
         Reply reply = new Reply("reply");
-        reply.addReply(post);
+        reply.createReply(post);
         replyRepository.save(reply);
     }
 }

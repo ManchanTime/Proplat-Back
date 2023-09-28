@@ -25,6 +25,9 @@ public class User {
     @OneToMany(mappedBy = "user")
     private List<UserStack> userStackList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Post> userPostList = new ArrayList<>();
+
     //==연관 관계 매핑 함수==//
 
     /**

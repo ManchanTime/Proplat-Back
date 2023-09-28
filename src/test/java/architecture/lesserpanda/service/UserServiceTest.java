@@ -1,5 +1,6 @@
 package architecture.lesserpanda.service;
 
+import architecture.lesserpanda.entity.Post;
 import architecture.lesserpanda.entity.User;
 import architecture.lesserpanda.entity.UserStack;
 import architecture.lesserpanda.repository.UserRepository;
@@ -19,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class UserServiceTest {
 
     @Autowired UserService userService;
-    @Autowired UserRepository userRepository;
+    @Autowired PostService postService;
     @Test
     public void join(){
         User user = new User("user1");
@@ -38,5 +39,16 @@ class UserServiceTest {
         user.addUserStack(userStack);
 
         userService.join(user);
+    }
+
+    @Test
+    public void getAllPost(){
+        User user = new User("user");
+        userService.join(user);
+
+        Post post = new Post("post1");
+        post.createPost(user);
+
+        Post post1 = new Post("post2");
     }
 }
