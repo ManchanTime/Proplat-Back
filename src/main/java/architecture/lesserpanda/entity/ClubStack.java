@@ -13,11 +13,11 @@ public class ClubStack {
     @Column(name = "club_stack_id")
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tech_stack_id")
     private TechStack techStack;
 }

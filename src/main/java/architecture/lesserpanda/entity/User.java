@@ -1,7 +1,6 @@
 package architecture.lesserpanda.entity;
 
 import jakarta.persistence.*;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -23,8 +22,22 @@ public class User {
     private String loginPassword;
     private String nickname;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user")
     private List<UserStack> userStackList = new ArrayList<>();
+
+    //==연관 관계 매핑 함수==//
+
+    /**
+     * 유저 생성 시 userStack 넣어서 생성
+     */
+    public void addUserStack(UserStack userStack){
+        userStackList.add(userStack);
+        userStack.setUser(this);
+    }
+
+    public User(String name) {
+        this.name = name;
+    }
 
     public User(String name, String loginId, String loginPassword, String nickname) {
         this.name = name;

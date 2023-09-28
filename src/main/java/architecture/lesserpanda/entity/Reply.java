@@ -5,6 +5,10 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
 @Getter
@@ -18,11 +22,45 @@ public class Reply {
     private String content;
     private LocalDateTime date;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
-//    @ManyToOne
-//    @JoinColumn(name = "reply_id")
-//    private Reply reply;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "parent_id")
+    private Reply parent;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Reply> child = new ArrayList<>();
+
+    public Reply(String content) {
+        this.content = content;
+    }
+
+    /**
+     * setter 대신 사용할 메소드들
+     */
+    public void setParent(Reply parent){
+        this.parent = parent;
+    }
+    public void setPost(Post post){
+        this.post = post;
+    }
+
+    //==연관 관계 메서드==//
+    /**
+     * 대댓글 작성
+     */
+    public void addChildReply(Reply child){
+        this.child.add(child);
+        child.setParent(this);
+    }
+
+    /**
+     * Post에 댓글 추가
+     */
+    public void addReply(Post post){
+        this.post = post;
+        post.getReplyList().add(this);
+    }
 }
