@@ -21,6 +21,8 @@ public class User {
     private String loginId;
     private String loginPassword;
     private String nickname;
+    private String phoneNumber;
+    private String introduce;
 
     @OneToMany(mappedBy = "user")
     private List<UserStack> userStackList = new ArrayList<>();

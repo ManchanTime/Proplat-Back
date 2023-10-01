@@ -21,6 +21,7 @@ public class Club {
     private String title;
     private String content;
     private String url;
+    private LocalDateTime nextDday;
 
     @OneToMany(mappedBy = "club")
     private List<ClubStack> clubStackList;
