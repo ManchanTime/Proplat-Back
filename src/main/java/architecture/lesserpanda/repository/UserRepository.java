@@ -26,4 +26,17 @@ public class UserRepository {
                 .setParameter("loginId", loginId)
                 .getResultList();
     }
+
+    /**
+     *  유저 이메일을 받아서 값을 꺼낸 후 암호화된 비밀번호 return
+     */
+    public String checkUser(String loginId){
+        List<User> user =
+                em.createQuery("select u from User u where u.loginId = :loginId", User.class)
+                .setParameter("loginId", loginId)
+                .getResultList();
+        if(!user.isEmpty())
+            return user.get(0).getLoginPassword();
+        else return "";
+    }
 }

@@ -38,14 +38,21 @@ public class User {
         userStack.setUser(this);
     }
 
+    //생성자
     public User(String name) {
         this.name = name;
     }
 
-    public User(String name, String loginId, String loginPassword, String nickname) {
+    public User(String name, String loginId, String loginPassword) {
         this.name = name;
         this.loginId = loginId;
         this.loginPassword = loginPassword;
-        this.nickname = nickname;
+    }
+
+    /**
+     * setter 대신 사용 -> Json 사용시 필요없?!
+     */
+    public void setPassword(String password){
+        this.loginPassword = password;
     }
 }

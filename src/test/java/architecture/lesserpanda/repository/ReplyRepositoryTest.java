@@ -52,12 +52,11 @@ class ReplyRepositoryTest {
 
         Reply rereply = new Reply("rereply");
 
-        reply.createRereply(rereply);
+        reply.addRereply(rereply);
         replyRepository.save(rereply);
 
         List<Reply> resultList = em.createQuery("select r from Reply r join r.child c", Reply.class)
                 .getResultList();
-        System.out.println("resultList.get(0).getChild().get(0).getContent() = " + resultList.get(0).getChild().get(0).getContent());
         assertThat(resultList.size()).isEqualTo(1);
     }
 
@@ -67,7 +66,7 @@ class ReplyRepositoryTest {
         postRepository.save(post);
 
         Reply reply = new Reply("reply");
-        reply.createReply(post);
+        reply.setPost(post);
         replyRepository.save(reply);
     }
 }

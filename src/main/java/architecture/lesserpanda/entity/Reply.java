@@ -33,25 +33,11 @@ public class Reply {
     @OneToMany(mappedBy = "parent")
     private List<Reply> child = new ArrayList<>();
 
-    public Reply(String content) {
-        this.content = content;
-    }
-
-    /**
-     * setter 대신 사용할 메소드들
-     */
-    public void setParent(Reply parent){
-        this.parent = parent;
-    }
-    public void setPost(Post post){
-        this.post = post;
-    }
-
-    //==연관 관계 메서드==//
+    //==연관 관계 생성 메서드==//
     /**
      * 대댓글 작성
      */
-    public void createRereply(Reply parent){
+    public void addRereply(Reply parent){
         this.parent = parent;
         parent.getChild().add(this);
     }
@@ -59,8 +45,18 @@ public class Reply {
     /**
      * Post에 댓글 추가
      */
-    public void createReply(Post post){
+    public void setPost(Post post){
         this.post = post;
         post.getReplyList().add(this);
+    }
+
+    //생성자
+    public Reply(String content) {
+        this.content = content;
+    }
+
+    public Reply(String content, LocalDateTime date) {
+        this.content = content;
+        this.date = date;
     }
 }

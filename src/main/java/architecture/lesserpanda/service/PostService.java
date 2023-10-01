@@ -22,7 +22,7 @@ public class PostService {
     @Transactional
     public Long savePost(Post post, Long userId){
         User user = userRepository.findById(userId);
-        post.createPost(user);
+        post.setUser(user);
         postRepository.save(post);
         return post.getId();
     }

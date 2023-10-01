@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>제목</th>
+                <th>내용</th>
+                <th>작성날짜</th>
+                <th>모집중</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <td th:text="${post.title}"></td>
+                <td th:text="${post.content}"></td>
+                <td th:text="${post.date}"></td>
+                <td th:text="${post.complete}"></td>
+            </tbody>
+        </table>
+    </div>
+
+    <form role="form" th:action="@{/post/{id}/viewPost (id=${post.id})}" th:object="${replyForm}" method="post">
+        <label th:for="text">Content:</label>
+        <input type="text" th:field="*{content}" class="form-control" required>
+        <br>
+        <button type="submit">Complete</button>
+    </form>
+
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>내용</th>
+                <th>작성날짜</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reply : ${replies}">
+                <td th:text="${reply.content}"></td>
+                <td th:text="${reply.date}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div> <!-- /container -->
+</body>
+</html>

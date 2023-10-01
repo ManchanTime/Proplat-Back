@@ -47,7 +47,7 @@ class UserServiceTest {
         userService.join(user);
 
         Post post = new Post("post1");
-        post.createPost(user);
+        post.setUser(user);
 
         Post post1 = new Post("post2");
     }

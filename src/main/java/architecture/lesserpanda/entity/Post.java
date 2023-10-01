@@ -3,6 +3,7 @@ package architecture.lesserpanda.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.misc.NotNull;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -35,27 +36,25 @@ public class Post {
     }
 
     //==연관 관계 생성 메서드==//
-    public void createPost(User user){
+    public void setUser(User user){
         this.user = user;
         user.getUserPostList().add(this);
     }
 
-    public Post(String title, String content, Boolean complete, LocalDateTime date, User user) {
+
+    //생성자
+    public Post(String title, String content, LocalDateTime date, Boolean complete) {
         this.title = title;
         this.content = content;
-        this.complete = complete;
         this.date = date;
-        this.user = user;
+        this.complete = complete;
     }
 
-    public Post(String title, String content, Boolean complete, LocalDateTime date, String image, User user) {
+    public Post(String title, String content, Boolean complete, LocalDateTime date, String image) {
         this.title = title;
         this.content = content;
         this.complete = complete;
         this.date = date;
         this.image = image;
-        this.user = user;
     }
-
-
 }

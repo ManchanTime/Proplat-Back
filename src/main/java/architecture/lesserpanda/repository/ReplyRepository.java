@@ -21,6 +21,12 @@ public class ReplyRepository {
         return em.find(Reply.class, id);
     }
 
+    public List<Reply> findByPostId(Long postId){
+        return em.createQuery("select r from Reply r join r.post p where p.id = :postId", Reply.class)
+                .setParameter("postId", postId)
+                .getResultList();
+    }
+
     public void delete(Reply reply){
         em.remove(reply);
     }

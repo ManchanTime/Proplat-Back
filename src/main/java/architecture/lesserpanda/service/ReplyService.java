@@ -21,7 +21,7 @@ public class ReplyService {
     @Transactional
     public Long saveReply(Reply reply, Long postId){
         Post post = postRepository.findById(postId);
-        reply.createReply(post);
+        reply.setPost(post);
         replyRepository.save(reply);
         return reply.getId();
     }
@@ -32,6 +32,10 @@ public class ReplyService {
 
     public List<Reply> findAll(){
         return replyRepository.findAll();
+    }
+
+    public List<Reply> findByPostId(Long postId){
+        return replyRepository.findByPostId(postId);
     }
 
     @Transactional

@@ -27,7 +27,7 @@ class PostServiceTest {
         userService.join(user);
 
         Post post = new Post("test");
-        post.createPost(user);
+        post.setUser(user);
         Long id = postService.savePost(post, user.getId());
 
         Post findPost = postService.findPost(id);
