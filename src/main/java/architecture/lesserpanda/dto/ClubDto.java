@@ -1,13 +1,17 @@
 package architecture.lesserpanda.dto;
 
+import architecture.lesserpanda.dto.TechStackDto.TechStackInfoDto;
 import architecture.lesserpanda.entity.Club;
 import architecture.lesserpanda.entity.ClubStack;
 import lombok.Builder;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Builder
+@Data
 public class ClubDto {
     private String name;
     private LocalDateTime dDay;
@@ -15,17 +19,7 @@ public class ClubDto {
     private String content;
     private String url;
     private LocalDateTime nextDday;
-
-//    public static ClubDto toClubDto(String name, LocalDateTime dDay, String title, String content, String url, LocalDateTime nextDday) {
-//        return ClubDto.builder()
-//                .name(name)
-//                .dDay(dDay)
-//                .title(title)
-//                .content(content)
-//                .url(url)
-//                .nextDday(nextDday)
-//                .build();
-//    }
+    private List<TechStackInfoDto> techStackList;
 
     public static ClubDto toClubDto(Club club) {
         return ClubDto.builder()
@@ -35,7 +29,12 @@ public class ClubDto {
                 .content(club.getContent())
                 .url(club.getUrl())
                 .nextDday(club.getNextDday())
+                .techStackList(club.getClubStackList().stream()
+                        .map(ClubStack::getTechStack)
+                        .map(techStack -> TechStackInfoDto.builder().name(techStack.getName()).build())
+                        .collect(Collectors.toList()))
                 .build();
     }
+
 
 }

@@ -5,7 +5,16 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class TechStackDto {
+
+    @Getter
+    @Builder
+    public static class TechStackInfoDto{
+        private String name;
+        private List<ClubDto> clubs;
+    }
 
     @Getter
     @NoArgsConstructor
