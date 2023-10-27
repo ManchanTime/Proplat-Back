@@ -3,8 +3,8 @@ package architecture.lesserpanda.controller;
 import architecture.lesserpanda.entity.Post;
 import architecture.lesserpanda.entity.Reply;
 import architecture.lesserpanda.entity.User;
-import architecture.lesserpanda.form.PostForm;
-import architecture.lesserpanda.form.ReplyForm;
+import architecture.lesserpanda.dto.PostDto;
+import architecture.lesserpanda.dto.ReplyDto;
 import architecture.lesserpanda.service.PostService;
 import architecture.lesserpanda.service.ReplyService;
 import architecture.lesserpanda.service.UserService;
@@ -26,13 +26,13 @@ public class PostController {
     private final ReplyService replyService;
 
     @GetMapping("/new")
-    private String post(Model model, PostForm postForm){
+    private String post(Model model, PostDto postForm){
         model.addAttribute("postForm", postForm);
         return "/post/createPost";
     }
 
     @PostMapping("/new")
-    private String createPost(@ModelAttribute PostForm postForm){
+    private String createPost(@ModelAttribute PostDto postForm){
         User user = userService.findUser(1L);
         Post post = new Post(postForm.getTitle(), postForm.getContent(), LocalDateTime.now(), postForm.getComplete());
         postService.savePost(post, user.getId());
@@ -47,22 +47,21 @@ public class PostController {
         return "/post/postList";
     }
 
-    @GetMapping("/{postId}/viewPost")
-    public String choosePost(@PathVariable("postId") Long postId, Model model){
-        Post post = postService.findPost(postId);
-        List<Reply> replyList = replyService.findByPostId(postId);
-        ReplyForm replyForm = new ReplyForm();
-        model.addAttribute("post", post);
-        model.addAttribute("replyForm", replyForm);
-        model.addAttribute("replies", replyList);
-        return "/post/viewPost";
-    }
+//    @GetMapping("/{postId}/viewPost")
+//    public String choosePost(@PathVariable("postId") Long postId, Model model){
+//        Post post = postService.findPost(postId);
+//        List<Reply> replyList = replyService.findByPostId(postId);
+//        ReplyDto replyForm = new ReplyDto();
+//        model.addAttribute("post", post);
+//        model.addAttribute("replyForm", replyForm);
+//        model.addAttribute("replies", replyList);
+//        return "/post/viewPost";
+//    }
 
     @PostMapping("/{postId}/viewPost")
-    public String createReply(@PathVariable("postId") Long postId, @ModelAttribute("replyForm") ReplyForm replyForm){
+    public String createReply(@PathVariable("postId") Long postId, @ModelAttribute("replyForm") ReplyDto replyForm){
         Reply reply = new Reply(replyForm.getContent(), LocalDateTime.now());
         replyService.saveReply(reply, postId);
-
         return "redirect:/post/{postId}/viewPost";
     }
 }

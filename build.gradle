@@ -31,10 +31,17 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation('org.springframework.boot:spring-boot-starter-web')
+	//implementation group: 'org.hibernate', name: 'hibernate-spatial'
+
 	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
 
 	implementation group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.7.6'
+
+	// Querydsl 추가
+	implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
+	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 }
 
 tasks.named('test') {

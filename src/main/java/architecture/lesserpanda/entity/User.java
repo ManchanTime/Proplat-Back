@@ -1,6 +1,7 @@
 package architecture.lesserpanda.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -24,10 +25,10 @@ public class User {
     private String phoneNumber;
     private String introduce;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<UserStack> userStackList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> userPostList = new ArrayList<>();
 
     //==연관 관계 매핑 함수==//
@@ -36,25 +37,20 @@ public class User {
      * 유저 생성 시 userStack 넣어서 생성
      */
     public void addUserStack(UserStack userStack){
-        userStackList.add(userStack);
-        userStack.setUser(this);
+        this.userStackList.add(userStack);
     }
 
-    //생성자
-    public User(String name) {
-        this.name = name;
-    }
-
-    public User(String name, String loginId, String loginPassword) {
+    @Builder
+    public User(Long id, String name, String loginId, String loginPassword,
+                String nickname, String phoneNumber, String introduce) {
+        this.id = id;
         this.name = name;
         this.loginId = loginId;
         this.loginPassword = loginPassword;
-    }
-
-    /**
-     * setter 대신 사용 -> Json 사용시 필요없?!
-     */
-    public void setPassword(String password){
-        this.loginPassword = password;
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.introduce = introduce;
+        this.userStackList = new ArrayList<>();
+        this.userPostList = new ArrayList<>();
     }
 }

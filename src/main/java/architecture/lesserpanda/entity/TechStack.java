@@ -1,6 +1,7 @@
 package architecture.lesserpanda.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -25,4 +26,9 @@ public class TechStack {
 
     @OneToMany(mappedBy = "techStack")
     private List<PostStack> postStackList;
+
+    @Builder
+    public TechStack(String name) {
+        this.name = name;
+    }
 }

@@ -1,13 +1,11 @@
-package architecture.lesserpanda.form;
+package architecture.lesserpanda.dto;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
-import lombok.Setter;
-
-import java.time.LocalDateTime;
-
-@Getter @Setter
-public class PostForm {
+import lombok.AllArgsConstructor;
+import lombok.Data;
+@Data
+@AllArgsConstructor
+public class PostDto {
 
     @NotNull(message = "제목은 NULL 일 수 없습니다!")
     private String title;

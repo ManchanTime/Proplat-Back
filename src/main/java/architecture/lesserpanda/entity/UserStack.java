@@ -1,6 +1,7 @@
 package architecture.lesserpanda.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -21,10 +22,14 @@ public class UserStack {
     @JoinColumn(name = "user_id")
     private User user;
 
-    /**
-     * set 대신 사용할 함수
-     */
-    public void setUser(User user){
+    @Builder
+    public UserStack(Long id, TechStack techStack, User user) {
+        this.id = id;
+        this.techStack = techStack;
         this.user = user;
+    }
+
+    public static UserStack createUserStack(User user, TechStack techStack){
+        return UserStack.builder().user(user).techStack(techStack).build();
     }
 }
