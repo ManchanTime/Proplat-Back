@@ -30,6 +30,7 @@ public class TechStack {
     @OneToMany(mappedBy = "techStack")
     private List<PostStack> postStackList;
 
+    //DTO로 만들었는데 이 부분 중복 사용 상관없는지 확인 필요할듯
     @Builder
     public TechStack(Long id, String name, TechType type) {
         this.id = id;
