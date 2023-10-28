@@ -36,22 +36,15 @@ public class UserService {
     public Long join(SaveRequest saveRequest){
         validateDuplicateUser(saveRequest);
         String encodePassword = passwordEncoder.encode(saveRequest.getLoginPassword());
-        User user = User.builder()
-                .name(saveRequest.getName())
-                .loginId(saveRequest.getLoginId())
-                .loginPassword(encodePassword)
-                .nickname(saveRequest.getNickname())
-                .phoneNumber(saveRequest.getPhoneNumber())
-                .introduce(saveRequest.getIntroduce())
-                .build();
+        User user = User.toEntity(saveRequest, encodePassword);
 
-        user = userRepository.findById(userRepository.save(user));
         List<String> techList = saveRequest.getTechList();
         for (String techName : techList) {
             TechStack techStack = techStackRepository.findByName(techName);
-            UserStack userStack = UserStack.createUserStack(user, techStack);
+            UserStack userStack = UserStack.createUserStack(techStack);
             user.addUserStack(userStack);
         }
+        userRepository.save(user);
         return user.getId();
     }
 
@@ -63,18 +56,6 @@ public class UserService {
             return LoginResponseDto.toLoginResponseDto(findUser.getId(), findUser.getNickname(), findUser.getLoginId());
         }
         else throw new IllegalArgumentException("비밀번호가 틀립니다.");
-    }
-
-    public User findUser(Long id){
-        return userRepository.findById(id);
-    }
-
-    /**
-     * 리포지토리에서 받아온 비밀번호와 입력한 비밀번호를 match 함수를 통해 비교 후 맞으면 true 아니면 false
-     */
-    public boolean checkUser(String loginId, String loginPassword){
-        String pwd = userRepository.checkUser(loginId);
-        return passwordEncoder.matches(loginPassword, pwd);
     }
 
     private void validateDuplicateUser(SaveRequest saveRequest) {

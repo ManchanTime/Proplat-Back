@@ -1,5 +1,7 @@
 package architecture.lesserpanda.entity;
 
+import architecture.lesserpanda.dto.PostDto;
+import architecture.lesserpanda.dto.UserDto;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -7,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static architecture.lesserpanda.dto.UserDto.*;
 
 @Entity
 @Getter
@@ -38,6 +42,7 @@ public class User {
      */
     public void addUserStack(UserStack userStack){
         this.userStackList.add(userStack);
+        userStack.setUser(this);
     }
 
     @Builder
@@ -52,5 +57,16 @@ public class User {
         this.introduce = introduce;
         this.userStackList = new ArrayList<>();
         this.userPostList = new ArrayList<>();
+    }
+
+    public static User toEntity(SaveRequest saveRequest, String encodePassword){
+        return  User.builder()
+                .name(saveRequest.getName())
+                .loginId(saveRequest.getLoginId())
+                .loginPassword(encodePassword)
+                .nickname(saveRequest.getNickname())
+                .phoneNumber(saveRequest.getPhoneNumber())
+                .introduce(saveRequest.getIntroduce())
+                .build();
     }
 }

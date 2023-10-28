@@ -18,6 +18,9 @@ public class TechStack {
 
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    private TechType type;
+
     @OneToMany(mappedBy = "techStack")
     private List<ClubStack> clubStackList;
 
@@ -28,7 +31,9 @@ public class TechStack {
     private List<PostStack> postStackList;
 
     @Builder
-    public TechStack(String name) {
+    public TechStack(Long id, String name, TechType type) {
+        this.id = id;
         this.name = name;
+        this.type = type;
     }
 }

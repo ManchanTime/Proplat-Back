@@ -29,7 +29,11 @@ public class UserStack {
         this.user = user;
     }
 
-    public static UserStack createUserStack(User user, TechStack techStack){
-        return UserStack.builder().user(user).techStack(techStack).build();
+    public static UserStack createUserStack(TechStack techStack){
+        return UserStack.builder().techStack(techStack).build();
+    }
+
+    public void setUser(User user){
+        this.user = user;
     }
 }
