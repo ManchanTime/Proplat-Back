@@ -1,11 +1,16 @@
 package architecture.lesserpanda.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
-@Data
-@AllArgsConstructor
 public class ReplyDto {
-    private Long id;
-    private String content;
+
+    @Getter
+    @NoArgsConstructor
+    public static class ReplySaveRequestDto{
+        private String content;
+        @Builder
+        public ReplySaveRequestDto(String content) {
+            this.content = content;
+        }
+    }
 }

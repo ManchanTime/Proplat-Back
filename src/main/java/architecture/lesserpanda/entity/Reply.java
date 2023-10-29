@@ -1,6 +1,8 @@
 package architecture.lesserpanda.entity;
 
+import architecture.lesserpanda.dto.ReplyDto;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -8,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static architecture.lesserpanda.dto.ReplyDto.*;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
@@ -51,12 +54,22 @@ public class Reply {
     }
 
     //생성자
-    public Reply(String content) {
-        this.content = content;
-    }
-
-    public Reply(String content, LocalDateTime date) {
+    @Builder
+    public Reply(Long id, String content, LocalDateTime date, Post post, Reply parent, List<Reply> child) {
+        this.id = id;
         this.content = content;
         this.date = date;
+        this.post = post;
+        this.parent = parent;
+        this.child = child;
+    }
+
+    public static Reply toEntity(ReplySaveRequestDto replySaveRequestDto, Post post){
+        return Reply
+                .builder()
+                .content(replySaveRequestDto.getContent())
+                .date(LocalDateTime.now())
+                .post(post)
+                .build();
     }
 }

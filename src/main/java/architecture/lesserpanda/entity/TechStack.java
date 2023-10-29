@@ -21,14 +21,14 @@ public class TechStack {
     @Enumerated(EnumType.STRING)
     private TechType type;
 
-    @OneToMany(mappedBy = "techStack")
-    private List<ClubStack> clubStackList;
-
-    @OneToMany(mappedBy = "techStack")
-    private List<UserStack> userStackList;
-
-    @OneToMany(mappedBy = "techStack")
-    private List<PostStack> postStackList;
+//    @OneToMany(mappedBy = "techStack")
+//    private List<ClubStack> clubStackList;
+//
+//    @OneToMany(mappedBy = "techStack")
+//    private List<UserStack> userStackList;
+//
+//    @OneToMany(mappedBy = "techStack")
+//    private List<PostStack> postStackList;
 
     //DTO로 만들었는데 이 부분 중복 사용 상관없는지 확인 필요할듯
     @Builder

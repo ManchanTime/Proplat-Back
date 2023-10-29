@@ -8,5 +8,7 @@ import static architecture.lesserpanda.dto.PostDto.*;
 
 public interface SearchPostRepository {
 
-    Page<PostListResponseDto> postListResponseDtoPage(String keyword, Pageable pageable);
+    Page<FindPostResponseDto> postListResponseDtoPage(String keyword, Pageable pageable);
+
+    FindPostResponseDto findOnePost(Long id);
 }

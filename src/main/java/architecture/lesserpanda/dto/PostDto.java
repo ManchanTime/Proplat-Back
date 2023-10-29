@@ -5,11 +5,10 @@ import architecture.lesserpanda.entity.PostStack;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-import static architecture.lesserpanda.dto.PostStackDto.*;
 import static architecture.lesserpanda.dto.TechStackDto.*;
 
 @Data
@@ -39,50 +38,30 @@ public class PostDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PostListResponseDto{
+    public static class FindPostResponseDto {
         private Long postId;
         private String title;
         private String content;
         private boolean complete;
-        private String stackList;
+        private List<TechStackPostInfoDto> postStackList = new ArrayList<>();
 
         @Builder
-        public PostListResponseDto(Long postId, String title, String content, boolean complete, String stackList) {
+        public FindPostResponseDto(Long postId, String title, String content, boolean complete, List<TechStackPostInfoDto> postStackList) {
             this.postId = postId;
             this.title = title;
             this.content = content;
             this.complete = complete;
-            this.stackList = stackList;
+            this.postStackList = postStackList;
         }
 
-        public static PostListResponseDto toEntity(Post post){
-            return PostListResponseDto
-                    .builder()
+        public static FindPostResponseDto toFindPostResponseDto(Post post, List<TechStackPostInfoDto> list){
+            return FindPostResponseDto.builder()
                     .postId(post.getId())
                     .title(post.getTitle())
                     .content(post.getContent())
                     .complete(post.getComplete())
+                    .postStackList(list)
                     .build();
         }
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class LoadRequestDto{
-        private Long postId;
-
-        @Builder
-        public LoadRequestDto(Long postId) {
-            this.postId = postId;
-        }
-    }
-
-    @Getter
-    @NoArgsConstructor
-    public static class LoadResponseDto{
-        private Long postId;
-        private String title;
-        private String content;
-
     }
 }

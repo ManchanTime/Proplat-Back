@@ -1,32 +1,29 @@
 package architecture.lesserpanda.repository;
 
 import architecture.lesserpanda.dto.PostDto;
-import architecture.lesserpanda.dto.PostStackDto;
 import architecture.lesserpanda.dto.TechStackDto;
 import architecture.lesserpanda.entity.Post;
-import architecture.lesserpanda.entity.QPost;
-import architecture.lesserpanda.entity.QPostStack;
-import architecture.lesserpanda.entity.QTechStack;
-import com.querydsl.core.group.GroupBy;
-import com.querydsl.core.types.Projections;
+import architecture.lesserpanda.entity.PostStack;
+import architecture.lesserpanda.entity.TechStack;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static architecture.lesserpanda.dto.PostDto.*;
-import static architecture.lesserpanda.dto.PostStackDto.*;
 import static architecture.lesserpanda.dto.TechStackDto.*;
 import static architecture.lesserpanda.entity.QPost.*;
 import static architecture.lesserpanda.entity.QPostStack.*;
 import static architecture.lesserpanda.entity.QTechStack.*;
-import static com.querydsl.core.group.GroupBy.*;
+import static com.querydsl.core.group.GroupBy.groupBy;
+import static java.util.stream.Collectors.*;
 
 @Repository
 public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implements SearchPostRepository {
@@ -37,34 +34,53 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implemen
         this.jpaQueryFactory = jpaQueryFactory;
     }
 
+    //프로젝트 구인 글 리스트
     @Override
-    public Page<PostListResponseDto> postListResponseDtoPage(String keyword, Pageable pageable){
-        List<PostListResponseDto> content = jpaQueryFactory
-                .select(
-                        Projections.fields(
-                                PostListResponseDto.class,
-                                post.id.as("postId"),
-                                post.title.as("title"),
-                                post.content.as("content"),
-                                post.complete.as("complete"),
-                                list(
-                                        Projections.fields(
-                                                ResponseDto.class,
-                                                postStack.techStack.name.as("name"),
-                                                postStack.techStack.type.as("type")
-                                        )
-                                ).as("stackList")
-                        )
-                )
+    public Page<FindPostResponseDto> postListResponseDtoPage(String keyword, Pageable pageable){
+        List<FindPostResponseDto> content = new ArrayList<>(jpaQueryFactory
+                .select(post.id, post.title, post.content, post.complete, techStack.name, techStack.type)
                 .from(post)
-                .join(post.postStackList, postStack)
-                .join(postStack.techStack, techStack)
+                .innerJoin(post.postStackList, postStack)
+                .innerJoin(postStack.techStack, techStack)
                 .where(containTitle(keyword), containContent(keyword))
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-        long count  = content.size();
-        return new PageImpl<>(content, pageable, count);
+                .stream()
+                .collect(groupingBy(
+                        tuple -> tuple.get(post.id), // Post ID로 그룹화
+                        mapping(tuple -> tuple, // Post ID별로 그룹화된 결과를 FindPostResponseDto로 변환
+                                collectingAndThen(
+                                        toList(), tuples -> FindPostResponseDto.builder()
+                                        .postId(tuples.get(0).get(post.id))
+                                        .title(tuples.get(0).get(post.title))
+                                        .content(tuples.get(0).get(post.content))
+                                        .complete(Boolean.TRUE.equals(tuples.get(0).get(post.complete)))
+                                        .postStackList(tuples.stream()
+                                                .map(t ->
+                                                        new TechStackPostInfoDto(
+                                                                t.get(techStack.name),
+                                                                t.get(techStack.type)
+                                                        )
+                                                )
+                                                .collect(toList()))
+                                        .build())
+                        )
+                ))
+                .values());
+        return new PageImpl<>(content, pageable, content.size());
+    }
+
+    @Override
+    public FindPostResponseDto findOnePost(Long postId){
+        Post findPost = jpaQueryFactory
+                .selectFrom(post)
+                .leftJoin(post.postStackList, postStack).fetchJoin()
+                .leftJoin(postStack.techStack, techStack).fetchJoin()
+                .where(post.id.eq(postId))
+                .fetchOne();
+        assert findPost != null;
+        List<TechStackPostInfoDto> techStackPostInfoDtoList = findPost.getPostStackList().stream()
+                .map(postStack -> TechStackPostInfoDto.toTechStackPostInfoDto(postStack.getTechStack()))
+                .collect(Collectors.toList());
+        return FindPostResponseDto.toFindPostResponseDto(findPost, techStackPostInfoDtoList);
     }
 
     BooleanExpression containContent(String keyword){
