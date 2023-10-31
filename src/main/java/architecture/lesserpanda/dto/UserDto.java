@@ -1,6 +1,9 @@
 package architecture.lesserpanda.dto;
 
-import architecture.lesserpanda.entity.User;
+import architecture.lesserpanda.dto.TechStackDto.TechStackInfoDto;
+import architecture.lesserpanda.entity.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -8,6 +11,7 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @Builder
@@ -72,6 +76,27 @@ public class UserDto {
                     .id(id)
                     .nickname(nickname)
                     .loginId(loginId)
+                    .build();
+        }
+    }
+
+    @Getter
+    @Builder
+    public static class UserInfoDto{
+        private String name;
+        private String loginId;
+        private String nickname;
+        private String phoneNumber;
+        private String introduce;
+        //private List<TechStackInfoDto> techStackList;
+
+        public static UserInfoDto toUserInfoDto(User user) {
+            return UserInfoDto.builder()
+                    .name(user.getName())
+                    .loginId(user.getLoginId())
+                    .nickname(user.getNickname())
+                    .phoneNumber(user.getPhoneNumber())
+                    .introduce(user.getIntroduce())
                     .build();
         }
     }
