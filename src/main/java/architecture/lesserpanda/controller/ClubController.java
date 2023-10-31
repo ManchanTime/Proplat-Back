@@ -18,6 +18,6 @@ public class ClubController {
 
     @GetMapping
     public Page<ClubDto> getClubList(@PageableDefault Pageable pageable){
-        return clubService.getClubList(pageable);
+        return clubService.getAllClubsWithTechStack(pageable);
     }
 }

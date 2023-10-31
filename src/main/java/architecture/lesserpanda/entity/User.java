@@ -35,6 +35,9 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Post> userPostList = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Reply> userReplyList = new ArrayList<>();
+
     //==연관 관계 매핑 함수==//
 
     /**
@@ -57,6 +60,7 @@ public class User {
         this.introduce = introduce;
         this.userStackList = new ArrayList<>();
         this.userPostList = new ArrayList<>();
+        this.userReplyList = new ArrayList<>();
     }
 
     public static User toEntity(SaveRequest saveRequest, String encodePassword){

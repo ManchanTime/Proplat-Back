@@ -88,15 +88,16 @@ public class UserDto {
         private String nickname;
         private String phoneNumber;
         private String introduce;
-        //private List<TechStackInfoDto> techStackList;
+        private List<TechStackInfoDto> userStackList = new ArrayList<>();
 
-        public static UserInfoDto toUserInfoDto(User user) {
+        public static UserInfoDto toUserInfoDto(User user, List<TechStackInfoDto> techStackInfoDtoList) {
             return UserInfoDto.builder()
                     .name(user.getName())
                     .loginId(user.getLoginId())
                     .nickname(user.getNickname())
                     .phoneNumber(user.getPhoneNumber())
                     .introduce(user.getIntroduce())
+                    .userStackList(techStackInfoDtoList)
                     .build();
         }
     }

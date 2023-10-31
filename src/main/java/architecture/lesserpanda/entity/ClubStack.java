@@ -1,6 +1,7 @@
 package architecture.lesserpanda.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -20,4 +21,20 @@ public class ClubStack {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tech_stack_id")
     private TechStack techStack;
+
+    @Builder
+    public ClubStack(Long id, Club club, TechStack techStack) {
+        this.id = id;
+        this.club = club;
+        this.techStack = techStack;
+    }
+
+    //테스트용
+    public static ClubStack createClubStack(TechStack techStack){
+        return ClubStack.builder().techStack(techStack).build();
+    }
+
+    public void setClub(Club club){
+        this.club = club;
+    }
 }

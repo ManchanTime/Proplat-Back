@@ -53,10 +53,6 @@ public class UserController {
         if(loginUser == null){
             throw new IllegalStateException("로그인 안돼있음");
         }
-
         return userService.getUserInfo(loginUser);
-
     }
-
-
 }

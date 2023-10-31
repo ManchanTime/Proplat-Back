@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,7 +20,7 @@ public class ClubDto {
     private String content;
     private String url;
     private LocalDateTime nextDday;
-    private List<TechStackInfoDto> techStackList;
+    private List<TechStackInfoDto> clubStackList = new ArrayList<>();
 
     public static ClubDto toClubDto(Club club) {
         return ClubDto.builder()
@@ -29,12 +30,10 @@ public class ClubDto {
                 .content(club.getContent())
                 .url(club.getUrl())
                 .nextDday(club.getNextDday())
-                .techStackList(club.getClubStackList().stream()
-                        .map(ClubStack::getTechStack)
-                        .map(techStack -> TechStackInfoDto.builder().name(techStack.getName()).build())
-                        .collect(Collectors.toList()))
+//                .techStackList(club.getClubStackList().stream()
+//                        .map(ClubStack::getTechStack)
+//                        .map(techStack -> TechStackInfoDto.builder().name(techStack.getName()).build())
+//                        .collect(Collectors.toList()))
                 .build();
     }
-
-
 }

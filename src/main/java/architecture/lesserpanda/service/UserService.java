@@ -49,7 +49,8 @@ public class UserService {
     }
 
     public LoginResponseDto login(LoginRequestDto userLoginRequestDto){
-        User findUser = userRepository.findByLoginId(userLoginRequestDto.getLoginId()).orElseThrow(() -> new IllegalArgumentException());
+        User findUser = userRepository
+                .findByLoginId(userLoginRequestDto.getLoginId()).orElseThrow(IllegalArgumentException::new);
 
         boolean check = passwordEncoder.matches(userLoginRequestDto.getLoginPassword(), findUser.getLoginPassword());
         if(check){
@@ -66,11 +67,6 @@ public class UserService {
 
     //마이페이지
     public UserInfoDto getUserInfo(LoginResponseDto loginResponseDto){
-        User user = userRepository.findById(loginResponseDto.getId());
-
-        UserInfoDto userInfo = UserInfoDto.toUserInfoDto(user);
-
-        return userInfo;
-
+        return userRepository.findUserInfo(loginResponseDto.getId());
     }
 }

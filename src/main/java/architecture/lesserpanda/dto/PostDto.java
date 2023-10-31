@@ -1,13 +1,11 @@
 package architecture.lesserpanda.dto;
 
 import architecture.lesserpanda.entity.Post;
-import architecture.lesserpanda.entity.PostStack;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static architecture.lesserpanda.dto.TechStackDto.*;
 
@@ -43,10 +41,11 @@ public class PostDto {
         private String title;
         private String content;
         private boolean complete;
-        private List<TechStackPostInfoDto> postStackList = new ArrayList<>();
+        private List<TechStackInfoDto> postStackList = new ArrayList<>();
 
         @Builder
-        public FindPostResponseDto(Long postId, String title, String content, boolean complete, List<TechStackPostInfoDto> postStackList) {
+        public FindPostResponseDto(Long postId, String title, String content,
+                                   boolean complete, List<TechStackInfoDto> postStackList) {
             this.postId = postId;
             this.title = title;
             this.content = content;
@@ -54,7 +53,7 @@ public class PostDto {
             this.postStackList = postStackList;
         }
 
-        public static FindPostResponseDto toFindPostResponseDto(Post post, List<TechStackPostInfoDto> list){
+        public static FindPostResponseDto toFindPostResponseDto(Post post, List<TechStackInfoDto> list){
             return FindPostResponseDto.builder()
                     .postId(post.getId())
                     .title(post.getTitle())

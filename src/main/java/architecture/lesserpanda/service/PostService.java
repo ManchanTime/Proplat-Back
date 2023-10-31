@@ -42,7 +42,7 @@ public class PostService {
 
     @Transactional
     public Long save(SaveRequestDto saveRequestDto, LoginResponseDto loginResponseDto) {
-        User user = userRepository.findById(loginResponseDto.getId());
+        User user = userRepository.findById(loginResponseDto.getId()).orElseThrow();
         Post post = Post.toEntity(saveRequestDto, user);
 
         List<String> stackList = saveRequestDto.getStackList();

@@ -1,10 +1,6 @@
 package architecture.lesserpanda.repository;
 
-import architecture.lesserpanda.dto.PostDto;
-import architecture.lesserpanda.dto.TechStackDto;
 import architecture.lesserpanda.entity.Post;
-import architecture.lesserpanda.entity.PostStack;
-import architecture.lesserpanda.entity.TechStack;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -55,7 +51,7 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implemen
                                         .complete(Boolean.TRUE.equals(tuples.get(0).get(post.complete)))
                                         .postStackList(tuples.stream()
                                                 .map(t ->
-                                                        new TechStackPostInfoDto(
+                                                        new TechStackInfoDto(
                                                                 t.get(techStack.name),
                                                                 t.get(techStack.type)
                                                         )
@@ -68,6 +64,7 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implemen
         return new PageImpl<>(content, pageable, content.size());
     }
 
+    //프로젝트 구인글 상세 정보 가져오기
     @Override
     public FindPostResponseDto findOnePost(Long postId){
         Post findPost = jpaQueryFactory
@@ -77,8 +74,8 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implemen
                 .where(post.id.eq(postId))
                 .fetchOne();
         assert findPost != null;
-        List<TechStackPostInfoDto> techStackPostInfoDtoList = findPost.getPostStackList().stream()
-                .map(postStack -> TechStackPostInfoDto.toTechStackPostInfoDto(postStack.getTechStack()))
+        List<TechStackInfoDto> techStackPostInfoDtoList = findPost.getPostStackList().stream()
+                .map(postStack -> TechStackInfoDto.toTechStackPostInfoDto(postStack.getTechStack()))
                 .collect(Collectors.toList());
         return FindPostResponseDto.toFindPostResponseDto(findPost, techStackPostInfoDtoList);
     }

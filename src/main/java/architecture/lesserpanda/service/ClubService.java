@@ -1,6 +1,7 @@
 package architecture.lesserpanda.service;
 
 import architecture.lesserpanda.dto.ClubDto;
+import architecture.lesserpanda.dto.TechStackDto;
 import architecture.lesserpanda.entity.Club;
 import architecture.lesserpanda.repository.ClubRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static architecture.lesserpanda.dto.TechStackDto.*;
 
 /**
  * 동아리 소개 페이지
@@ -23,11 +26,8 @@ import java.util.stream.Collectors;
 public class ClubService {
 
     private final ClubRepository clubRepository;
-    public Page<ClubDto> getClubList (Pageable pageable){
-        Page<Club> clubs = clubRepository.findAll(pageable);
 
-        Page<ClubDto> allClubList = clubs.map(ClubDto::toClubDto);
-
-        return allClubList;
+    public Page<ClubDto> getAllClubsWithTechStack(Pageable pageable){
+        return clubRepository.clubListResponseDtoPage(pageable);
     }
 }

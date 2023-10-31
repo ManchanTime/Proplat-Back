@@ -21,7 +21,6 @@ import static architecture.lesserpanda.global.SessionConstants.*;
 public class PostController {
 
     private final PostService postService;
-    private final ReplyService replyService;
 
     @PostMapping("/save-api")
     public SaveRequestDto savePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
@@ -50,11 +49,4 @@ public class PostController {
             throw new IllegalStateException("로그인이 안돼있음");
         return postService.deletePost(postId, loginUser.getLoginId());
     }
-
-    @PostMapping("/postId={postId}/reply-api")
-    public ReplySaveRequestDto replySave(@PathVariable Long postId, @RequestBody ReplySaveRequestDto replySaveRequestDto){
-        replyService.saveReply(postId, replySaveRequestDto);
-        return replySaveRequestDto;
-    }
-
 }
