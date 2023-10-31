@@ -1,5 +1,6 @@
 package architecture.lesserpanda.controller;
 
+import architecture.lesserpanda.dto.PostDto;
 import architecture.lesserpanda.dto.TechStackDto;
 import architecture.lesserpanda.dto.UserDto;
 import architecture.lesserpanda.entity.TechStack;
@@ -45,4 +46,17 @@ public class UserController {
         }
         return loginInfo;
     }
+
+    //마이페이지
+    @GetMapping("/user-api/my-page")
+    public UserInfoDto showUserInfo(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser){
+        if(loginUser == null){
+            throw new IllegalStateException("로그인 안돼있음");
+        }
+
+        return userService.getUserInfo(loginUser);
+
+    }
+
+
 }
