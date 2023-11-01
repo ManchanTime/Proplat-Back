@@ -38,6 +38,12 @@ public class UserController {
         return loginInfo;
     }
 
+    //로그 아웃
+    @PostMapping("/user-api/logout")
+    public void logout(HttpSession session){
+        session.invalidate();
+    }
+
     //마이페이지
     @GetMapping("/user-api/my-page")
     public UserInfoDto showUserInfo(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser){

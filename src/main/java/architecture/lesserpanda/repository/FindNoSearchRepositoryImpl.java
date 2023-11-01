@@ -87,14 +87,14 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
                 .innerJoin(clubStack.techStack, techStack)
                 .stream()
                 .collect(groupingBy(
-                        tuple -> tuple.get(club.id), // Post ID로 그룹화
-                        mapping(tuple -> tuple, // Post ID별로 그룹화된 결과를 FindPostResponseDto로 변환
+                        tuple -> tuple.get(club.id), // Club ID로 그룹화
+                        mapping(tuple -> tuple, // Club ID별로 그룹화된 결과를 ClubDto로 변환
                                 collectingAndThen(
                                         toList(), tuples -> ClubDto.builder()
                                                 .name(tuples.get(0).get(club.name))
                                                 .dDay(tuples.get(0).get(club.dDay))
                                                 .title(tuples.get(0).get(club.title))
-                                                .content(tuples.get(0).get(post.content))
+                                                .content(tuples.get(0).get(club.content))
                                                 .url(tuples.get(0).get(club.url))
                                                 .nextDday(tuples.get(0).get(club.nextDday))
                                                 .clubStackList(tuples.stream()

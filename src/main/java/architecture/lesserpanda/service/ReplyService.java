@@ -19,6 +19,14 @@ import org.springframework.transaction.annotation.Transactional;
 import static architecture.lesserpanda.dto.ReplyDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
 
+/**
+ * 필요 기능
+ * 1. 댓글 리스트 출력
+ * 2. 댓글 작성
+ * 3. 댓글 삭제
+ * 4. 대댓글 작성
+ * 5. 대댓글 삭제
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -53,11 +61,11 @@ public class ReplyService {
 
     @Transactional
     public String deleteReply(String loginId, Long replyId){
-        Reply reply = replyRepository.findById(replyId).orElseThrow();
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
         if(reply.getUser().getLoginId().equals(loginId)){
             replyRepository.delete(reply);
             return "clear";
         }
-        throw new IllegalStateException("로그인 안돼있음");
+        throw new IllegalStateException(NOT_OWNER);
     }
 }

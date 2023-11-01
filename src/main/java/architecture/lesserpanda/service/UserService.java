@@ -21,11 +21,11 @@ import static architecture.lesserpanda.dto.UserDto.*;
 import static architecture.lesserpanda.dto.UserDto.LoginResponseDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
 
-/*
+/**
     필요 기능
     1. 회원 가입
     2. 로그인
- */
+ **/
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
