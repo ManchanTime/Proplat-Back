@@ -23,12 +23,11 @@ import static architecture.lesserpanda.global.SessionConstants.*;
 public class UserController {
 
     private final UserService userService;
-    private final TechStackService techStackService;
     /**
      * DB에 유저 정보가 있는지 확인
      */
     //회원가입
-    @PostMapping("/user-api/insert")
+    @PostMapping("/user-api/signup")
     public SaveRequest joinUser(@RequestBody SaveRequest userSaveRequestDto){
         userService.join(userSaveRequestDto);
         return userSaveRequestDto;
