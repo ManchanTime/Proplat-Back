@@ -5,6 +5,7 @@ import architecture.lesserpanda.entity.TechStack;
 import architecture.lesserpanda.entity.User;
 import architecture.lesserpanda.entity.UserStack;
 import architecture.lesserpanda.exception.UserNotFoundException;
+import architecture.lesserpanda.global.ExceptionStatement;
 import architecture.lesserpanda.repository.TechStackRepository;
 import architecture.lesserpanda.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,8 @@ import java.util.List;
 import java.util.Optional;
 
 import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.dto.UserDto.LoginResponseDto.*;
+import static architecture.lesserpanda.global.ExceptionStatement.*;
 
 /*
     필요 기능
@@ -50,19 +53,18 @@ public class UserService {
     }
 
     public LoginResponseDto login(LoginRequestDto userLoginRequestDto){
-        User findUser = userRepository
-                .findByLoginId(userLoginRequestDto.getLoginId()).orElseThrow(IllegalArgumentException::new);
-
-        boolean check = passwordEncoder.matches(userLoginRequestDto.getLoginPassword(), findUser.getLoginPassword());
-        if(check){
-            return LoginResponseDto.toLoginResponseDto(findUser.getId(), findUser.getNickname(), findUser.getLoginId());
+        User user = userRepository
+                .findByLoginId(userLoginRequestDto.getLoginId())
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        if (!passwordEncoder.matches(userLoginRequestDto.getLoginPassword(), user.getLoginPassword())) {
+            throw new IllegalArgumentException(WRONG_PASSWORD);
         }
-        else throw new IllegalArgumentException("비밀번호가 틀립니다.");
+        return toLoginResponseDto(user.getId(), user.getNickname(), user.getLoginId());
     }
 
     private void validateDuplicateUser(SaveRequest saveRequest) {
         if(userRepository.findByLoginId(saveRequest.getLoginId()).isPresent()){
-            throw new UserNotFoundException("이미 존재하는 회원입니다.");
+            throw new UserNotFoundException(DUPLICATION_USER);
         }
     }
 

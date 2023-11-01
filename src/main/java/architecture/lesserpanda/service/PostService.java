@@ -1,28 +1,23 @@
 package architecture.lesserpanda.service;
 
-import architecture.lesserpanda.dto.PostDto;
-import architecture.lesserpanda.dto.TechStackDto;
 import architecture.lesserpanda.entity.*;
 import architecture.lesserpanda.exception.PostNotFoundException;
+import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.repository.PostRepository;
 import architecture.lesserpanda.repository.TechStackRepository;
 import architecture.lesserpanda.repository.UserRepository;
-import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static architecture.lesserpanda.dto.PostDto.*;
-import static architecture.lesserpanda.dto.TechStackDto.*;
 import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.global.ExceptionStatement.*;
 
 /**
  * 기능
@@ -42,7 +37,8 @@ public class PostService {
 
     @Transactional
     public Long save(SaveRequestDto saveRequestDto, LoginResponseDto loginResponseDto) {
-        User user = userRepository.findById(loginResponseDto.getId()).orElseThrow();
+        User user = userRepository.findById(loginResponseDto.getId())
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Post post = Post.toEntity(saveRequestDto, user);
 
         List<String> stackList = saveRequestDto.getStackList();
@@ -62,7 +58,7 @@ public class PostService {
     public FindPostResponseDto findPostById(Long postId) {
         FindPostResponseDto postById = postRepository.findOnePost(postId);
         if(postById == null){
-            throw new PostNotFoundException("존재하지 않는 포스트입니다.");
+            throw new PostNotFoundException(POST_NOT_FOUND);
         }
         return postById;
     }
@@ -76,9 +72,9 @@ public class PostService {
                 postRepository.delete(post);
                 return "clear";
             } else {
-                throw new IllegalStateException("작성자가 아닙니다.");
+                throw new IllegalStateException(NOT_OWNER);
             }
         }
-        throw new PostNotFoundException("존재하지 않는 포스트입니다.");
+        throw new PostNotFoundException(POST_NOT_FOUND);
     }
 }

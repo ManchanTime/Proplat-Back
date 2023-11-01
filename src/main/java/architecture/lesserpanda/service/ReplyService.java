@@ -3,6 +3,10 @@ package architecture.lesserpanda.service;
 import architecture.lesserpanda.entity.Post;
 import architecture.lesserpanda.entity.Reply;
 import architecture.lesserpanda.entity.User;
+import architecture.lesserpanda.exception.PostNotFoundException;
+import architecture.lesserpanda.exception.ReplyNotFoundException;
+import architecture.lesserpanda.exception.UserNotFoundException;
+import architecture.lesserpanda.global.ExceptionStatement;
 import architecture.lesserpanda.repository.PostRepository;
 import architecture.lesserpanda.repository.ReplyRepository;
 import architecture.lesserpanda.repository.UserRepository;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static architecture.lesserpanda.dto.ReplyDto.*;
+import static architecture.lesserpanda.global.ExceptionStatement.*;
 
 @Service
 @RequiredArgsConstructor
@@ -25,8 +30,8 @@ public class ReplyService {
 
     @Transactional
     public Long saveReply(Long loginId, Long postId, ReplySaveRequestDto replySaveRequestDto){
-        Post post = postRepository.findById(postId).orElseThrow();
-        User user = userRepository.findById(loginId).orElseThrow();
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(POST_NOT_FOUND));
+        User user = userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Reply reply = Reply.toReplyEntity(replySaveRequestDto, post, user);
         replyRepository.save(reply);
 
@@ -35,8 +40,8 @@ public class ReplyService {
 
     @Transactional
     public Long saveReReply(Long loginId, Long replyId, ReplySaveRequestDto replySaveRequestDto){
-        Reply parent = replyRepository.findById(replyId).orElseThrow();
-        User user = userRepository.findById(loginId).orElseThrow();
+        Reply parent = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
+        User user = userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Reply saveReply = Reply.toReReplyEntity(parent.getPost(), replySaveRequestDto, parent, user);
         replyRepository.save(saveReply);
         return saveReply.getId();

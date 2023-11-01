@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.ReplyDto.*;
 import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.global.ExceptionStatement.*;
 import static architecture.lesserpanda.global.SessionConstants.LOGIN_INFO;
 
 @RestController
@@ -34,12 +35,18 @@ public class ReplyController {
     public ReplySaveRequestDto reReplySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                          @RequestParam("replyId") Long replyId,
                                          @RequestBody ReplySaveRequestDto replySaveRequestDto){
+        if(loginUser == null){
+            throw new IllegalStateException(LOGIN_PLEASE);
+        }
         replyService.saveReReply(loginUser.getId(), replyId, replySaveRequestDto);
         return replySaveRequestDto;
     }
 
     @DeleteMapping("/replyId={replyId}/reply-delete-api")
     public String deleteReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser, @PathVariable Long replyId){
+        if(loginUser == null){
+            throw new IllegalStateException(LOGIN_PLEASE);
+        }
         return replyService.deleteReply(loginUser.getLoginId(), replyId);
     }
 }

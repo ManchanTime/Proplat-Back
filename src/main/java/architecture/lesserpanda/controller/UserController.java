@@ -1,21 +1,13 @@
 package architecture.lesserpanda.controller;
 
-import architecture.lesserpanda.dto.PostDto;
-import architecture.lesserpanda.dto.TechStackDto;
-import architecture.lesserpanda.dto.UserDto;
-import architecture.lesserpanda.entity.TechStack;
-import architecture.lesserpanda.global.SessionConstants;
-import architecture.lesserpanda.service.TechStackService;
 import architecture.lesserpanda.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.global.ExceptionStatement.*;
 import static architecture.lesserpanda.global.SessionConstants.*;
 
 @RestController
@@ -50,7 +42,7 @@ public class UserController {
     @GetMapping("/user-api/my-page")
     public UserInfoDto showUserInfo(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser){
         if(loginUser == null){
-            throw new IllegalStateException("로그인 안돼있음");
+            throw new IllegalStateException(LOGIN_PLEASE);
         }
         return userService.getUserInfo(loginUser);
     }
