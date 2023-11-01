@@ -4,6 +4,7 @@ import architecture.lesserpanda.dto.UserDto;
 import architecture.lesserpanda.entity.TechStack;
 import architecture.lesserpanda.entity.User;
 import architecture.lesserpanda.entity.UserStack;
+import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.repository.TechStackRepository;
 import architecture.lesserpanda.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +62,7 @@ public class UserService {
 
     private void validateDuplicateUser(SaveRequest saveRequest) {
         if(userRepository.findByLoginId(saveRequest.getLoginId()).isPresent()){
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            throw new UserNotFoundException("이미 존재하는 회원입니다.");
         }
     }
 

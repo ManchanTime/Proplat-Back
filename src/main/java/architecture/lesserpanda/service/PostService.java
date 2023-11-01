@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static architecture.lesserpanda.dto.PostDto.*;
 import static architecture.lesserpanda.dto.TechStackDto.*;
@@ -38,7 +39,6 @@ public class PostService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final TechStackRepository techStackRepository;
-    private final JPAQueryFactory jpaQueryFactory;
 
     @Transactional
     public Long save(SaveRequestDto saveRequestDto, LoginResponseDto loginResponseDto) {
@@ -60,17 +60,25 @@ public class PostService {
     }
 
     public FindPostResponseDto findPostById(Long postId) {
-        return postRepository.findOnePost(postId);
+        FindPostResponseDto postById = postRepository.findOnePost(postId);
+        if(postById == null){
+            throw new PostNotFoundException("존재하지 않는 포스트입니다.");
+        }
+        return postById;
     }
 
     @Transactional
     public String deletePost(Long postId, String loginId) {
-        Post post = postRepository.findById(postId).orElseThrow(PostNotFoundException::new);
-        if (post.getUser().getLoginId().equals(loginId)) {
-            postRepository.delete(post);
-            return "clear";
-        } else {
-            throw new IllegalStateException("작성자가 아닙니다.");
+        Optional<Post> find = postRepository.findById(postId);
+        if(find.isPresent()){
+            Post post = find.get();
+            if (post.getUser().getLoginId().equals(loginId)) {
+                postRepository.delete(post);
+                return "clear";
+            } else {
+                throw new IllegalStateException("작성자가 아닙니다.");
+            }
         }
+        throw new PostNotFoundException("존재하지 않는 포스트입니다.");
     }
 }

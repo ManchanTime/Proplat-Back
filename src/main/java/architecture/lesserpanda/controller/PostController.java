@@ -1,6 +1,7 @@
 package architecture.lesserpanda.controller;
 
 import architecture.lesserpanda.dto.ReplyDto;
+import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.service.PostService;
 import architecture.lesserpanda.service.ReplyService;
 import architecture.lesserpanda.service.UserService;
@@ -26,7 +27,7 @@ public class PostController {
     public SaveRequestDto savePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                    @RequestBody SaveRequestDto saveRequestDto){
         if(loginUser == null){
-            throw new IllegalStateException("로그인 안돼있음");
+            throw new IllegalStateException("로그인을 해주세요.");
         }
         postService.save(saveRequestDto, loginUser);
         return saveRequestDto;
@@ -46,7 +47,7 @@ public class PostController {
     public String deletePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                           @PathVariable Long postId){
         if(loginUser == null)
-            throw new IllegalStateException("로그인이 안돼있음");
+            throw new UserNotFoundException("로그인을 해주세요.");
         return postService.deletePost(postId, loginUser.getLoginId());
     }
 }

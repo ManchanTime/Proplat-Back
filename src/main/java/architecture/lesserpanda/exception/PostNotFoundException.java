@@ -1,6 +1,6 @@
 package architecture.lesserpanda.exception;
 
-public class PostNotFoundException extends IllegalArgumentException{
+public class PostNotFoundException extends IllegalStateException{
     public PostNotFoundException() {
     }
 
