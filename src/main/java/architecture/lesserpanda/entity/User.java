@@ -63,6 +63,13 @@ public class User {
         this.userReplyList = new ArrayList<>();
     }
 
+    public void update(UpdateInfoDto updateInfoDto, List<UserStack> userStackList){
+        this.name = updateInfoDto.getName();
+        this.nickname = updateInfoDto.getNickname();
+        this.phoneNumber = updateInfoDto.getPhoneNumber();
+        this.introduce = updateInfoDto.getIntroduce();
+        this.userStackList = userStackList;
+    }
     public static User toEntity(SaveRequest saveRequest, String encodePassword){
         return  User.builder()
                 .name(saveRequest.getName())

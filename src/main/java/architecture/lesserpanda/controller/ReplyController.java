@@ -18,6 +18,7 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
+    //댓글 작성
     @PostMapping("/postId={postId}/reply-save-api")
     public ReplySaveRequestDto replySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                         @PathVariable Long postId,
@@ -26,11 +27,13 @@ public class ReplyController {
         return replySaveRequestDto;
     }
 
+    //댓글 리스트
     @GetMapping("/postId={postId}/reply-list-api")
     public Page<ReplyGetResponseDto> replyList(@PathVariable Long postId, Pageable pageable){
         return replyService.findAll(postId, pageable);
     }
 
+    //대댓글 작성
     @PostMapping("/postId={postId}/rereply-save-api")
     public ReplySaveRequestDto reReplySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                          @RequestParam("replyId") Long replyId,
@@ -42,11 +45,23 @@ public class ReplyController {
         return replySaveRequestDto;
     }
 
+    //삭제
     @DeleteMapping("/replyId={replyId}/reply-delete-api")
     public String deleteReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser, @PathVariable Long replyId){
         if(loginUser == null){
             throw new IllegalStateException(LOGIN_PLEASE);
         }
         return replyService.deleteReply(loginUser.getLoginId(), replyId);
+    }
+
+    //업데이트
+    @PutMapping("/replyId={replyId}/reply-update-api")
+    public void updateReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
+                            @PathVariable Long replyId,
+                            @RequestBody ReplySaveRequestDto replySaveRequestDto){
+        if(loginUser == null){
+            throw new IllegalStateException(LOGIN_PLEASE);
+        }
+        replyService.updateReply(replyId, replySaveRequestDto, loginUser.getId());
     }
 }

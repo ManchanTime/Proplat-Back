@@ -68,4 +68,11 @@ public class ReplyService {
         }
         throw new IllegalStateException(NOT_OWNER);
     }
+
+    @Transactional
+    public void updateReply(Long replyId, ReplySaveRequestDto replySaveRequestDto, Long loginId){
+        userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(NOT_OWNER));
+        Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
+        reply.change(replySaveRequestDto);
+    }
 }

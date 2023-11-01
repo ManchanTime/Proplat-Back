@@ -66,8 +66,9 @@ public class Reply {
         this.child = child;
     }
 
-    //생성자
-
+    public void change(ReplySaveRequestDto replySaveRequestDto){
+        this.content = replySaveRequestDto.getContent();
+    }
 
     public static Reply toReplyEntity(ReplySaveRequestDto replySaveRequestDto, Post post, User user){
         return Reply

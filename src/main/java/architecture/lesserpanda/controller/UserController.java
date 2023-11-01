@@ -52,4 +52,14 @@ public class UserController {
         }
         return userService.getUserInfo(loginUser);
     }
+
+    //업데이트
+    @PutMapping("/user-api/update")
+    public void updateUser(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
+                           @RequestBody UpdateInfoDto updateUserInfo){
+        if(loginUser == null){
+            throw new IllegalStateException(LOGIN_PLEASE);
+        }
+        userService.updateUser(updateUserInfo, loginUser.getId());
+    }
 }

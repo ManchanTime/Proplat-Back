@@ -62,6 +62,12 @@ public class Post {
         this.postStackList = new ArrayList<>();
     }
 
+    public void change(SaveRequestDto saveRequestDto, List<PostStack> postStackList){
+        this.title = saveRequestDto.getTitle();
+        this.content = saveRequestDto.getContent();
+        this.postStackList = postStackList;
+    }
+
     public static Post toEntity(SaveRequestDto saveRequestDto, User user){
         return Post
                 .builder()

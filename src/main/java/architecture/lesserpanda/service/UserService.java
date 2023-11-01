@@ -8,6 +8,7 @@ import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.global.ExceptionStatement;
 import architecture.lesserpanda.repository.TechStackRepository;
 import architecture.lesserpanda.repository.UserRepository;
+import architecture.lesserpanda.repository.UserStackRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final TechStackRepository techStackRepository;
+    private final UserStackRepository userStackRepository;
     private final PasswordEncoder passwordEncoder;
 
     //회원 가입
@@ -45,8 +47,8 @@ public class UserService {
         List<String> techList = saveRequest.getTechList();
         for (String techName : techList) {
             TechStack techStack = techStackRepository.findByName(techName);
-            UserStack userStack = UserStack.createUserStack(techStack);
-            user.addUserStack(userStack);
+            UserStack userStack = UserStack.createUserStack(techStack, user);
+            user.getUserStackList().add(userStack);
         }
         userRepository.save(user);
         return user.getId();
@@ -71,5 +73,22 @@ public class UserService {
     //마이페이지
     public UserInfoDto getUserInfo(LoginResponseDto loginResponseDto){
         return userRepository.findUserInfo(loginResponseDto.getId());
+    }
+
+    //업데이트
+    @Transactional
+    public void updateUser(UpdateInfoDto updateUserInfo, Long userId){
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        List<String> techList = updateUserInfo.getUserStackList();
+        List<UserStack> beforeUserStackList = userStackRepository.findByUser(user);
+        userStackRepository.deleteAll(beforeUserStackList);
+
+        beforeUserStackList.clear();
+        for (String techName : techList) {
+            TechStack techStack = techStackRepository.findByName(techName);
+            UserStack userStack = UserStack.createUserStack(techStack, user);
+            beforeUserStackList.add(userStack);
+        }
+        user.update(updateUserInfo, beforeUserStackList);
     }
 }

@@ -101,4 +101,24 @@ public class UserDto {
                     .build();
         }
     }
+
+    @Getter
+    @Builder
+    public static class UpdateInfoDto{
+        private String name;
+        private String nickname;
+        private String phoneNumber;
+        private String introduce;
+        private List<String> userStackList = new ArrayList<>();
+
+        public static UpdateInfoDto toUpdateInfoDto(User user, List<String> techStackInfoDtoList) {
+            return UpdateInfoDto.builder()
+                    .name(user.getName())
+                    .nickname(user.getNickname())
+                    .phoneNumber(user.getPhoneNumber())
+                    .introduce(user.getIntroduce())
+                    .userStackList(techStackInfoDtoList)
+                    .build();
+        }
+    }
 }

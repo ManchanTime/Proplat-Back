@@ -29,8 +29,8 @@ public class PostStack {
         this.post = post;
     }
 
-    public static PostStack createPostStack(TechStack techStack){
-        return PostStack.builder().techStack(techStack).build();
+    public static PostStack createPostStack(TechStack techStack, Post post){
+        return PostStack.builder().techStack(techStack).post(post).build();
     }
 
     public void setPost(Post post){
