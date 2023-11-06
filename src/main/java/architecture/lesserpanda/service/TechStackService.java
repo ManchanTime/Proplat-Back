@@ -7,7 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import static architecture.lesserpanda.dto.TechStackDto.*;
 
 @Service
 @RequiredArgsConstructor
@@ -17,7 +22,7 @@ public class TechStackService {
     private final TechStackRepository techStackRepository;
 
     @Transactional
-    public Long saveTech(TechStackDto.RequestSave requestSave){
+    public Long saveTech(RequestSave requestSave){
         TechStack techStack = requestSave.toEntity();
         techStackRepository.save(techStack);
         return techStack.getId();
@@ -25,5 +30,11 @@ public class TechStackService {
 
     public Optional<TechStack> findTech(Long id){
         return techStackRepository.findById(id);
+    }
+
+    public List<TechStackInfoDto> findAllTech(){
+        return techStackRepository.findAll().stream()
+                .map(TechStackInfoDto::toTechStackPostInfoDto)
+                .collect(Collectors.toList());
     }
 }
