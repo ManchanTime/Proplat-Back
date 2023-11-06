@@ -49,7 +49,7 @@ public class WebSecurityConfig {
                 .antMatchers("/main/**").permitAll()
                 .antMatchers("/post/list").permitAll()
                 .antMatchers(HttpMethod.GET, "/post/postId={postId}").permitAll()
-                .antMatchers("/post/postId={postId}/reply-list").permitAll()
+                .antMatchers("/postId={postId}/reply-list").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

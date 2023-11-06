@@ -4,6 +4,7 @@ import architecture.lesserpanda.service.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.ReplyDto.*;
@@ -13,18 +14,16 @@ import static architecture.lesserpanda.config.SessionConstants.LOGIN_INFO;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/post/postId={postId}")
+@RequestMapping("/postId={postId}")
 public class ReplyController {
 
     private final ReplyService replyService;
 
     //댓글 작성
     @PostMapping("/reply-save")
-    public ReplySaveRequestDto replySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                                        @PathVariable Long postId,
-                                         @RequestBody ReplySaveRequestDto replySaveRequestDto){
-        replyService.saveReply(loginUser.getId(), postId, replySaveRequestDto);
-        return replySaveRequestDto;
+    public ResponseEntity<ReplyGetResponseDto> replySave(@PathVariable Long postId,
+                                                        @RequestBody ReplySaveRequestDto replySaveRequestDto){
+        return ResponseEntity.ok(replyService.saveReply(postId, replySaveRequestDto));
     }
 
     //댓글 리스트
@@ -35,33 +34,21 @@ public class ReplyController {
 
     //대댓글 작성
     @PostMapping("/rereply-save")
-    public ReplySaveRequestDto reReplySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                                         @RequestParam("replyId") Long replyId,
-                                         @RequestBody ReplySaveRequestDto replySaveRequestDto){
-        if(loginUser == null){
-            throw new IllegalStateException(LOGIN_PLEASE);
-        }
-        replyService.saveReReply(loginUser.getId(), replyId, replySaveRequestDto);
-        return replySaveRequestDto;
+    public ResponseEntity<ReplyGetResponseDto> reReplySave(@RequestParam("replyId") Long replyId,
+                                           @RequestBody ReplySaveRequestDto replySaveRequestDto){
+        return ResponseEntity.ok(replyService.saveReReply(replyId, replySaveRequestDto));
     }
 
     //삭제
-    @DeleteMapping("/replyId={replyId}/reply-delete")
-    public String deleteReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser, @PathVariable Long replyId){
-        if(loginUser == null){
-            throw new IllegalStateException(LOGIN_PLEASE);
-        }
-        return replyService.deleteReply(loginUser.getLoginId(), replyId);
+    @DeleteMapping("/replyId={replyId}/")
+    public String deleteReply(@PathVariable Long replyId){
+        return replyService.deleteReply(replyId);
     }
 
-    //업데이트
-    @PutMapping("/replyId={replyId}/reply-update")
-    public void updateReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                            @PathVariable Long replyId,
+    //수정
+    @PutMapping("/replyId={replyId}/")
+    public ResponseEntity<ReplyGetResponseDto> updateReply(@PathVariable(value = "replyId") Long replyId,
                             @RequestBody ReplySaveRequestDto replySaveRequestDto){
-        if(loginUser == null){
-            throw new IllegalStateException(LOGIN_PLEASE);
-        }
-        replyService.updateReply(replyId, replySaveRequestDto, loginUser.getId());
+        return ResponseEntity.ok(replyService.updateReply(replyId, replySaveRequestDto));
     }
 }
