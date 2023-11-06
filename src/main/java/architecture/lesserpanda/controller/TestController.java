@@ -8,10 +8,10 @@ import architecture.lesserpanda.entity.TechType;
 import architecture.lesserpanda.repository.ClubRepository;
 import architecture.lesserpanda.service.ClubService;
 import architecture.lesserpanda.service.TechStackService;
-import jakarta.persistence.OneToMany;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.LocalDateTime;
@@ -20,6 +20,7 @@ import java.util.List;
 import static architecture.lesserpanda.dto.TechStackDto.*;
 
 @RestController
+@RequestMapping("/test")
 @RequiredArgsConstructor
 public class TestController {
 
@@ -27,7 +28,7 @@ public class TestController {
     private final ClubService clubService;
     private final ClubRepository clubRepository;
 
-    @PostMapping("/tech-stack-api/insert")
+    @PostMapping("/tech-stack-insert")
     public void test(){
         RequestSave techStack1 = new RequestSave("IOS", TechType.ENVIRONMENT);
         RequestSave techStack2 = new RequestSave("java", TechType.ROLE);
@@ -43,7 +44,7 @@ public class TestController {
         techStackService.saveTech(techStack6);
     }
 
-    @PostMapping("/club-insert-api")
+    @PostMapping("/club-insert")
     public void testClub(){
         TechStack techStack1 = techStackService.findTech(1L).orElseThrow();
         ClubStack clubStack1 = ClubStack.createClubStack(techStack1);

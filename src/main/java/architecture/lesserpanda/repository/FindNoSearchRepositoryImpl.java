@@ -1,12 +1,8 @@
 package architecture.lesserpanda.repository;
 
 import architecture.lesserpanda.dto.ClubDto;
-import architecture.lesserpanda.dto.PostDto;
 import architecture.lesserpanda.dto.TechStackDto.TechStackInfoDto;
-import architecture.lesserpanda.dto.UserDto;
-import architecture.lesserpanda.entity.Post;
-import architecture.lesserpanda.entity.Reply;
-import architecture.lesserpanda.entity.User;
+import architecture.lesserpanda.entity.*;
 import com.querydsl.core.Tuple;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import org.springframework.data.domain.Page;
@@ -22,14 +18,13 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import static architecture.lesserpanda.dto.ReplyDto.*;
-import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.dto.MemberDto.*;
+
 import static architecture.lesserpanda.entity.QClub.*;
 import static architecture.lesserpanda.entity.QClubStack.clubStack;
-import static architecture.lesserpanda.entity.QPost.post;
-import static architecture.lesserpanda.entity.QPostStack.postStack;
+import static architecture.lesserpanda.entity.QMember.*;
 import static architecture.lesserpanda.entity.QReply.reply;
 import static architecture.lesserpanda.entity.QTechStack.techStack;
-import static architecture.lesserpanda.entity.QUser.*;
 import static architecture.lesserpanda.entity.QUserStack.userStack;
 import static java.util.stream.Collectors.*;
 import static java.util.stream.Collectors.toList;
@@ -48,15 +43,15 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
     @Override
     public Page<ReplyGetResponseDto> findPostReplies(Long postId, Pageable pageable) {
         List<Tuple> replyTuples = jpaQueryFactory
-                .select(reply, user.name)
+                .select(reply, member.name)
                 .from(reply)
-                .join(reply.user, user)
+                .join(reply.member, member)
                 .where(reply.post.id.eq(postId))
                 .fetch();
         Map<Long, ReplyGetResponseDto> replyDtoMap = new HashMap<>();
         for(Tuple tuple : replyTuples){
             Reply replyTmp = tuple.get(reply);
-            String username = tuple.get(user.name);
+            String username = tuple.get(member.name);
             //댓글
             if(replyTmp.getParent() == null){
                 ReplyGetResponseDto replyGetResponseDto =
@@ -115,16 +110,16 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
     //유저 정보 꺼내오기
     @Override
     public UserInfoDto findUserInfo(Long userId){
-        User findUser = jpaQueryFactory
-                .selectFrom(user)
-                .leftJoin(user.userStackList, userStack).fetchJoin()
+        Member findMember = jpaQueryFactory
+                .selectFrom(member)
+                .leftJoin(member.userStackList, userStack).fetchJoin()
                 .leftJoin(userStack.techStack, techStack).fetchJoin()
-                .where(user.id.eq(userId))
+                .where(member.id.eq(userId))
                 .fetchOne();
-        assert findUser != null;
-        List<TechStackInfoDto> techStackPostInfoDtoList = findUser.getUserStackList().stream()
+        assert findMember != null;
+        List<TechStackInfoDto> techStackPostInfoDtoList = findMember.getUserStackList().stream()
                 .map(userStack -> TechStackInfoDto.toTechStackPostInfoDto(userStack.getTechStack()))
                 .collect(Collectors.toList());
-        return UserInfoDto.toUserInfoDto(findUser, techStackPostInfoDtoList);
+        return UserInfoDto.toUserInfoDto(findMember, techStackPostInfoDtoList);
     }
 }

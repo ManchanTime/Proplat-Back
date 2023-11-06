@@ -1,12 +1,10 @@
 package architecture.lesserpanda.entity;
 
-import architecture.lesserpanda.dto.PostDto;
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +16,8 @@ import static architecture.lesserpanda.dto.PostDto.*;
 @RequiredArgsConstructor
 public class Post {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "post_id")
     private Long id;
 
@@ -29,8 +28,8 @@ public class Post {
     //private List<String> imageList;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Reply> replyList = new ArrayList<>();
@@ -50,14 +49,14 @@ public class Post {
 
     @Builder
     public Post(Long id, String title, String content, Boolean complete,
-                LocalDateTime date, User user) {
+                LocalDateTime date, Member member) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.complete = complete;
         this.date = date;
         //this.image = image;
-        this.user = user;
+        this.member = member;
         this.replyList = new ArrayList<>();
         this.postStackList = new ArrayList<>();
     }
@@ -68,11 +67,11 @@ public class Post {
         this.postStackList = postStackList;
     }
 
-    public static Post toEntity(SaveRequestDto saveRequestDto, User user){
+    public static Post toEntity(SaveRequestDto saveRequestDto, Member member){
         return Post
                 .builder()
                 .title(saveRequestDto.getTitle())
-                .user(user)
+                .member(member)
                 .content(saveRequestDto.getContent())
                 .complete(saveRequestDto.getComplete())
                 .date(LocalDateTime.now())

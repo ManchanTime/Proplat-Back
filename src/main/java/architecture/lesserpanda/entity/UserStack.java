@@ -1,16 +1,18 @@
 package architecture.lesserpanda.entity;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
 @RequiredArgsConstructor
 public class UserStack {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "user_stack_id")
     private Long id;
 
@@ -19,21 +21,21 @@ public class UserStack {
     private TechStack techStack;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "member_id")
+    private Member member;
 
     @Builder
-    public UserStack(Long id, TechStack techStack, User user) {
+    public UserStack(Long id, TechStack techStack, Member member) {
         this.id = id;
         this.techStack = techStack;
-        this.user = user;
+        this.member = member;
     }
 
-    public static UserStack createUserStack(TechStack techStack, User user){
-        return UserStack.builder().techStack(techStack).user(user).build();
+    public static UserStack createUserStack(TechStack techStack, Member member){
+        return UserStack.builder().techStack(techStack).member(member).build();
     }
 
-    public void setUser(User user){
-        this.user = user;
+    public void setMember(Member member){
+        this.member = member;
     }
 }

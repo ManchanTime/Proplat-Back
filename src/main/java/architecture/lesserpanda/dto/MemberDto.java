@@ -2,40 +2,42 @@ package architecture.lesserpanda.dto;
 
 import architecture.lesserpanda.dto.TechStackDto.TechStackInfoDto;
 import architecture.lesserpanda.entity.*;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.OneToMany;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.usertype.UserType;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @Builder
-public class UserDto {
+public class MemberDto {
 
     @NotBlank
     @Getter
     @NoArgsConstructor
-    public static class SaveRequest{
+    public static class SignUpRequestDto {
 
         private String name;
         @Email
         private String loginId;
         private String loginPassword;
+        private Authority authority;
         private String nickname;
         private String phoneNumber;
         private String introduce;
         private List<String> techList = new ArrayList<>();
 
-        public SaveRequest(String name, String loginId, String loginPassword, String nickname,
-                           String phoneNumber, String introduce, List<String> techList) {
+        @Builder
+        public SignUpRequestDto(String name, String loginId, String loginPassword,
+                                Authority authority, String nickname, String phoneNumber,
+                                String introduce, List<String> techList) {
             this.name = name;
             this.loginId = loginId;
             this.loginPassword = loginPassword;
+            this.authority = authority;
             this.nickname = nickname;
             this.phoneNumber = phoneNumber;
             this.introduce = introduce;
@@ -54,6 +56,10 @@ public class UserDto {
             this.loginId = loginId;
             this.loginPassword = loginPassword;
         }
+
+        public UsernamePasswordAuthenticationToken toAuthentication(){
+            return new UsernamePasswordAuthenticationToken(loginId, loginPassword);
+        }
     }
 
     @Getter
@@ -62,20 +68,23 @@ public class UserDto {
         private Long id;
         private String nickname;
         private String loginId;
+        private Authority authority;
 
         @Builder
-        public LoginResponseDto(Long id, String nickname, String loginId) {
+        public LoginResponseDto(Long id, String nickname, String loginId, Authority authority) {
             this.id = id;
             this.nickname = nickname;
             this.loginId = loginId;
+            this.authority = authority;
         }
 
-        public static LoginResponseDto toLoginResponseDto(Long id, String nickname, String loginId){
+        public static LoginResponseDto of(Member member) {
             return LoginResponseDto
                     .builder()
-                    .id(id)
-                    .nickname(nickname)
-                    .loginId(loginId)
+                    .id(member.getId())
+                    .nickname(member.getNickname())
+                    .loginId(member.getLoginId())
+                    .authority(member.getAuthority())
                     .build();
         }
     }
@@ -90,13 +99,13 @@ public class UserDto {
         private String introduce;
         private List<TechStackInfoDto> userStackList = new ArrayList<>();
 
-        public static UserInfoDto toUserInfoDto(User user, List<TechStackInfoDto> techStackInfoDtoList) {
+        public static UserInfoDto toUserInfoDto(Member member, List<TechStackInfoDto> techStackInfoDtoList) {
             return UserInfoDto.builder()
-                    .name(user.getName())
-                    .loginId(user.getLoginId())
-                    .nickname(user.getNickname())
-                    .phoneNumber(user.getPhoneNumber())
-                    .introduce(user.getIntroduce())
+                    .name(member.getName())
+                    .loginId(member.getLoginId())
+                    .nickname(member.getNickname())
+                    .phoneNumber(member.getPhoneNumber())
+                    .introduce(member.getIntroduce())
                     .userStackList(techStackInfoDtoList)
                     .build();
         }
@@ -111,12 +120,12 @@ public class UserDto {
         private String introduce;
         private List<String> userStackList = new ArrayList<>();
 
-        public static UpdateInfoDto toUpdateInfoDto(User user, List<String> techStackInfoDtoList) {
+        public static UpdateInfoDto toUpdateInfoDto(Member member, List<String> techStackInfoDtoList) {
             return UpdateInfoDto.builder()
-                    .name(user.getName())
-                    .nickname(user.getNickname())
-                    .phoneNumber(user.getPhoneNumber())
-                    .introduce(user.getIntroduce())
+                    .name(member.getName())
+                    .nickname(member.getNickname())
+                    .phoneNumber(member.getPhoneNumber())
+                    .introduce(member.getIntroduce())
                     .userStackList(techStackInfoDtoList)
                     .build();
         }

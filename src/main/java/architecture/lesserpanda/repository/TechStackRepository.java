@@ -1,7 +1,6 @@
 package architecture.lesserpanda.repository;
 
 import architecture.lesserpanda.entity.TechStack;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.query.Param;

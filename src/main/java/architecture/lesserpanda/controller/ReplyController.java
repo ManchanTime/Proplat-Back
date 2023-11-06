@@ -7,9 +7,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.ReplyDto.*;
-import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.dto.MemberDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
-import static architecture.lesserpanda.global.SessionConstants.LOGIN_INFO;
+import static architecture.lesserpanda.config.SessionConstants.LOGIN_INFO;
 
 @RestController
 @RequiredArgsConstructor

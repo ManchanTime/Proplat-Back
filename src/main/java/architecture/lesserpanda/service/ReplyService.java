@@ -1,15 +1,14 @@
 package architecture.lesserpanda.service;
 
+import architecture.lesserpanda.entity.Member;
 import architecture.lesserpanda.entity.Post;
 import architecture.lesserpanda.entity.Reply;
-import architecture.lesserpanda.entity.User;
 import architecture.lesserpanda.exception.PostNotFoundException;
 import architecture.lesserpanda.exception.ReplyNotFoundException;
 import architecture.lesserpanda.exception.UserNotFoundException;
-import architecture.lesserpanda.global.ExceptionStatement;
 import architecture.lesserpanda.repository.PostRepository;
 import architecture.lesserpanda.repository.ReplyRepository;
-import architecture.lesserpanda.repository.UserRepository;
+import architecture.lesserpanda.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -34,13 +33,13 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     @Transactional
     public Long saveReply(Long loginId, Long postId, ReplySaveRequestDto replySaveRequestDto){
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(POST_NOT_FOUND));
-        User user = userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-        Reply reply = Reply.toReplyEntity(replySaveRequestDto, post, user);
+        Member member = memberRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        Reply reply = Reply.toReplyEntity(replySaveRequestDto, post, member);
         replyRepository.save(reply);
 
         return reply.getId();
@@ -49,8 +48,8 @@ public class ReplyService {
     @Transactional
     public Long saveReReply(Long loginId, Long replyId, ReplySaveRequestDto replySaveRequestDto){
         Reply parent = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
-        User user = userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-        Reply saveReply = Reply.toReReplyEntity(parent.getPost(), replySaveRequestDto, parent, user);
+        Member member = memberRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        Reply saveReply = Reply.toReReplyEntity(parent.getPost(), replySaveRequestDto, parent, member);
         replyRepository.save(saveReply);
         return saveReply.getId();
     }
@@ -62,7 +61,7 @@ public class ReplyService {
     @Transactional
     public String deleteReply(String loginId, Long replyId){
         Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
-        if(reply.getUser().getLoginId().equals(loginId)){
+        if(reply.getMember().getLoginId().equals(loginId)){
             replyRepository.delete(reply);
             return "clear";
         }
@@ -71,7 +70,7 @@ public class ReplyService {
 
     @Transactional
     public void updateReply(Long replyId, ReplySaveRequestDto replySaveRequestDto, Long loginId){
-        userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(NOT_OWNER));
+        memberRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(NOT_OWNER));
         Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
         reply.change(replySaveRequestDto);
     }

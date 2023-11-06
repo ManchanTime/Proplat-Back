@@ -1,6 +1,5 @@
 package architecture.lesserpanda.controller;
 
-import architecture.lesserpanda.dto.PostDto;
 import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.service.PostService;
 import lombok.RequiredArgsConstructor;
@@ -9,9 +8,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.PostDto.*;
-import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.dto.MemberDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
-import static architecture.lesserpanda.global.SessionConstants.*;
+import static architecture.lesserpanda.config.SessionConstants.*;
 
 @RestController
 @RequiredArgsConstructor

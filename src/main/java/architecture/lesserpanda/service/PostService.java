@@ -6,19 +6,18 @@ import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.repository.PostRepository;
 import architecture.lesserpanda.repository.PostStackRepository;
 import architecture.lesserpanda.repository.TechStackRepository;
-import architecture.lesserpanda.repository.UserRepository;
+import architecture.lesserpanda.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static architecture.lesserpanda.dto.PostDto.*;
-import static architecture.lesserpanda.dto.UserDto.*;
+import static architecture.lesserpanda.dto.MemberDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
 
 /**
@@ -35,15 +34,15 @@ import static architecture.lesserpanda.global.ExceptionStatement.*;
 public class PostService {
 
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
     private final TechStackRepository techStackRepository;
     private final PostStackRepository postStackRepository;
 
     @Transactional
     public Long save(SaveRequestDto saveRequestDto, LoginResponseDto loginResponseDto) {
-        User user = userRepository.findById(loginResponseDto.getId())
+        Member member = memberRepository.findById(loginResponseDto.getId())
                 .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
-        Post post = Post.toEntity(saveRequestDto, user);
+        Post post = Post.toEntity(saveRequestDto, member);
 
         List<String> stackList = saveRequestDto.getStackList();
         for (String name : stackList) {
@@ -72,7 +71,7 @@ public class PostService {
         Optional<Post> find = postRepository.findById(postId);
         if(find.isPresent()){
             Post post = find.get();
-            if (post.getUser().getLoginId().equals(loginId)) {
+            if (post.getMember().getLoginId().equals(loginId)) {
                 postRepository.delete(post);
                 return "clear";
             } else {
@@ -85,7 +84,7 @@ public class PostService {
     //업데이트
     @Transactional
     public void updatePost(Long postId, SaveRequestDto saveRequestDto, Long loginId) {
-        userRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+        memberRepository.findById(loginId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(POST_NOT_FOUND));
 
         List<String> techList = saveRequestDto.getStackList();

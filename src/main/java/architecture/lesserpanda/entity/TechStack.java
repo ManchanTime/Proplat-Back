@@ -1,10 +1,10 @@
 package architecture.lesserpanda.entity;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.*;
 import java.util.List;
 
 @Entity
@@ -12,7 +12,8 @@ import java.util.List;
 @Getter
 public class TechStack {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "tech_stack_id")
     private Long id;
 

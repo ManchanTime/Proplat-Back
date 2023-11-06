@@ -1,9 +1,9 @@
 package architecture.lesserpanda.dto;
 
 import architecture.lesserpanda.entity.Post;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 

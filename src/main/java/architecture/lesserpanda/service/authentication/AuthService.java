@@ -1,0 +1,43 @@
+package architecture.lesserpanda.service.authentication;
+
+import architecture.lesserpanda.dto.MemberDto;
+import architecture.lesserpanda.dto.TokenDto;
+import architecture.lesserpanda.entity.Member;
+import architecture.lesserpanda.global.jwt.TokenProvider;
+import architecture.lesserpanda.repository.MemberRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import static architecture.lesserpanda.dto.MemberDto.*;
+
+@Service
+@RequiredArgsConstructor
+@Transactional
+public class AuthService {
+    private final AuthenticationManagerBuilder managerBuilder;
+    private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TokenProvider tokenProvider;
+
+    //회원가입
+    public LoginResponseDto signup(SignUpRequestDto requestDto){
+        if(memberRepository.existsByLoginId(requestDto.getLoginId())){
+            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+        }
+        String encodePassword = passwordEncoder.encode(requestDto.getLoginPassword());
+        Member member = Member.toEntity(requestDto, encodePassword);
+        return LoginResponseDto.of(memberRepository.save(member));
+    }
+
+    //로그인
+    public TokenDto login(LoginRequestDto requestDto){
+        UsernamePasswordAuthenticationToken authenticationToken = requestDto.toAuthentication();
+        Authentication authentication = managerBuilder.getObject().authenticate(authenticationToken);
+        return tokenProvider.generateTokenDto(authentication);
+    }
+}

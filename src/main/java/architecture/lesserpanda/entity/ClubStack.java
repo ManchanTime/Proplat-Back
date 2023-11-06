@@ -1,16 +1,18 @@
 package architecture.lesserpanda.entity;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @Getter
 @RequiredArgsConstructor
 public class ClubStack {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "club_stack_id")
     private Long id;
 

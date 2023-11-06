@@ -1,16 +1,18 @@
 package architecture.lesserpanda.entity;
 
-import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+
+import javax.persistence.*;
 
 @Entity
 @RequiredArgsConstructor
 @Getter
 public class PostStack {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "post_stack_id")
     private Long id;
 

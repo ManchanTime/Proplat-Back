@@ -1,4 +1,4 @@
-package architecture.lesserpanda.global;
+package architecture.lesserpanda.config;
 
 public interface SessionConstants {
     String LOGIN_INFO = "loginInfo";

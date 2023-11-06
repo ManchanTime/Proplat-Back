@@ -1,10 +1,11 @@
 package architecture.lesserpanda.entity;
 
-import jakarta.persistence.*;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class Club {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     @Column(name = "club_id")
     private Long id;
 

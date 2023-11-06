@@ -1,13 +1,13 @@
 package architecture.lesserpanda.repository;
 
 import architecture.lesserpanda.entity.Member;
-import architecture.lesserpanda.entity.UserStack;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface UserStackRepository extends JpaRepository<UserStack, Long> {
-    List<UserStack> findByMember(Member member);
+public interface MemberRepository extends JpaRepository<Member, Long>, FindNoSearchRepository{
+    Optional<Member> findByLoginId(String loginId);
+    boolean existsByLoginId(String loginId);
 }

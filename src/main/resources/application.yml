@@ -20,3 +20,8 @@ spring:
 logging.level:
   org.hibernate.SQL: debug
   org.hibernate.orm.jdbc.bind: trace
+
+jwt:
+  #HS512 알고리즘을 사용할 것이기 때문에 512bit, 즉 64byte 이상의 secret key를 사용해야 한다.
+  #echo 'silvernine-tech-spring-boot-jwt-tutorial-secret-silvernine-tech-spring-boot-jwt-tutorial-secret' 이라는 문자열을 base64로 인코딩
+  secret: KLwq6ankmcBgh0rA/z5mc67pShboxiOICIUT23Do5TT9hBRPcSH3T7h0SUetWBzAl8YyW1q1AYtwn2OYE52P2w==
