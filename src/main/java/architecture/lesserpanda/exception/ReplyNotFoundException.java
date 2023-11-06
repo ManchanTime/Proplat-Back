@@ -1,6 +1,6 @@
 package architecture.lesserpanda.exception;
 
-public class ReplyNotFoundException extends IllegalStateException{
+public class ReplyNotFoundException extends RuntimeException{
     public ReplyNotFoundException() {
     }
 

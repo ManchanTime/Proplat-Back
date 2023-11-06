@@ -5,6 +5,7 @@ import architecture.lesserpanda.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.PostDto.*;
@@ -21,13 +22,8 @@ public class PostController {
 
     //저장
     @PostMapping("/save")
-    public SaveRequestDto savePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                                   @RequestBody SaveRequestDto saveRequestDto){
-        if(loginUser == null){
-            throw new IllegalStateException(LOGIN_PLEASE);
-        }
-        postService.save(saveRequestDto, loginUser);
-        return saveRequestDto;
+    public ResponseEntity<FindPostResponseDto> savePost(@RequestBody SaveRequestDto saveRequestDto){
+        return ResponseEntity.ok(postService.save(saveRequestDto));
     }
 
     //리스트
@@ -38,28 +34,20 @@ public class PostController {
 
     //상세 페이지
     @GetMapping("/postId={postId}")
-    public FindPostResponseDto choosePost(@PathVariable Long postId){
-        return postService.findPostById(postId);
+    public ResponseEntity<FindPostResponseDto> choosePost(@PathVariable Long postId){
+        return ResponseEntity.ok(postService.findPostInfo(postId));
     }
 
     //삭제
     @DeleteMapping("/postId={postId}")
-    public String deletePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                                          @PathVariable Long postId){
-        if(loginUser == null)
-            throw new UserNotFoundException(LOGIN_PLEASE);
-        return postService.deletePost(postId, loginUser.getLoginId());
+    public String deletePost(@PathVariable Long postId){
+        return postService.deletePost(postId);
     }
 
     //업데이트
     @PutMapping("/postId={postId}")
-    public SaveRequestDto updatePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                                     @RequestBody SaveRequestDto saveRequestDto,
-                                     @PathVariable Long postId){
-        if(loginUser == null)
-            throw new UserNotFoundException(LOGIN_PLEASE);
-        postService.updatePost(postId, saveRequestDto, loginUser.getId());
-
-        return saveRequestDto;
+    public ResponseEntity<FindPostResponseDto> updatePost(@RequestBody SaveRequestDto saveRequestDto,
+                                                          @PathVariable Long postId){
+        return ResponseEntity.ok(postService.updatePost(postId, saveRequestDto));
     }
 }
