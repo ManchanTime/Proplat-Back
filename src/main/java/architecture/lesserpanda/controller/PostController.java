@@ -20,7 +20,7 @@ public class PostController {
     private final PostService postService;
 
     //저장
-    @PostMapping("/save-api")
+    @PostMapping("/save")
     public SaveRequestDto savePost(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                    @RequestBody SaveRequestDto saveRequestDto){
         if(loginUser == null){
@@ -31,7 +31,7 @@ public class PostController {
     }
 
     //리스트
-    @GetMapping("/list-api")
+    @GetMapping("/list")
     public Page<FindPostResponseDto> postList(@RequestParam(required = false) String keyword, Pageable pageable){
         return postService.findAllPost(keyword, pageable);
     }

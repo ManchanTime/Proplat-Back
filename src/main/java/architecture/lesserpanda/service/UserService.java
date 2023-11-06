@@ -34,20 +34,24 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
 
     public LoginResponseDto getMyInfoBySecurity(){
-        return memberRepository.findById(SecurityUtil.getCurrentMemberId())
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return memberRepository.findById(currentMemberId)
                 .map(LoginResponseDto::of)
                 .orElseThrow(() -> new RuntimeException("로그인 유저 정보가 없습니다"));
     }
 
     //마이페이지
-    public UserInfoDto getUserInfo(LoginResponseDto loginResponseDto){
-        return memberRepository.findUserInfo(loginResponseDto.getId());
+    public UserInfoDto getUserInfo(){
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        return memberRepository.findUserInfo(currentMemberId);
     }
 
     //업데이트
     @Transactional
-    public void updateUser(UpdateInfoDto updateUserInfo, Long userId){
-        Member member = memberRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
+    public UserInfoDto updateUser(UpdateInfoDto updateUserInfo){
+        Long currentMemberId = SecurityUtil.getCurrentMemberId();
+        Member member = memberRepository.findById(currentMemberId)
+                .orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         List<String> techList = updateUserInfo.getUserStackList();
         List<UserStack> beforeUserStackList = userStackRepository.findByMember(member);
         userStackRepository.deleteAll(beforeUserStackList);
@@ -59,5 +63,7 @@ public class UserService {
             beforeUserStackList.add(userStack);
         }
         member.update(updateUserInfo, beforeUserStackList);
+
+        return memberRepository.findUserInfo(currentMemberId);
     }
 }

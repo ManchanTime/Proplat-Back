@@ -7,6 +7,7 @@ import architecture.lesserpanda.global.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -46,6 +47,9 @@ public class WebSecurityConfig {
                 .antMatchers("/test/**").permitAll()
                 .antMatchers("/auth/**").permitAll()
                 .antMatchers("/main/**").permitAll()
+                .antMatchers("/post/list").permitAll()
+                .antMatchers(HttpMethod.GET, "/post/postId={postId}").permitAll()
+                .antMatchers("/post/postId={postId}/reply-list").permitAll()
                 .anyRequest().authenticated()
 
                 .and()

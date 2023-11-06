@@ -13,13 +13,13 @@ import static architecture.lesserpanda.config.SessionConstants.LOGIN_INFO;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/post")
+@RequestMapping("/post/postId={postId}")
 public class ReplyController {
 
     private final ReplyService replyService;
 
     //댓글 작성
-    @PostMapping("/postId={postId}/reply-save-api")
+    @PostMapping("/reply-save")
     public ReplySaveRequestDto replySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                         @PathVariable Long postId,
                                          @RequestBody ReplySaveRequestDto replySaveRequestDto){
@@ -28,13 +28,13 @@ public class ReplyController {
     }
 
     //댓글 리스트
-    @GetMapping("/postId={postId}/reply-list-api")
+    @GetMapping("/reply-list")
     public Page<ReplyGetResponseDto> replyList(@PathVariable Long postId, Pageable pageable){
         return replyService.findAll(postId, pageable);
     }
 
     //대댓글 작성
-    @PostMapping("/postId={postId}/rereply-save-api")
+    @PostMapping("/rereply-save")
     public ReplySaveRequestDto reReplySave(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                                          @RequestParam("replyId") Long replyId,
                                          @RequestBody ReplySaveRequestDto replySaveRequestDto){
@@ -46,7 +46,7 @@ public class ReplyController {
     }
 
     //삭제
-    @DeleteMapping("/replyId={replyId}/reply-delete-api")
+    @DeleteMapping("/replyId={replyId}/reply-delete")
     public String deleteReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser, @PathVariable Long replyId){
         if(loginUser == null){
             throw new IllegalStateException(LOGIN_PLEASE);
@@ -55,7 +55,7 @@ public class ReplyController {
     }
 
     //업데이트
-    @PutMapping("/replyId={replyId}/reply-update-api")
+    @PutMapping("/replyId={replyId}/reply-update")
     public void updateReply(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
                             @PathVariable Long replyId,
                             @RequestBody ReplySaveRequestDto replySaveRequestDto){

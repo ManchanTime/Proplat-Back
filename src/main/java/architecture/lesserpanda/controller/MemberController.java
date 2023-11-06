@@ -27,15 +27,13 @@ public class MemberController {
 
     //마이페이지
     @GetMapping("/my-page")
-    public ResponseEntity<LoginResponseDto> showUserInfo(){
-        LoginResponseDto myInfoBySecurity = userService.getMyInfoBySecurity();
-        return ResponseEntity.ok((myInfoBySecurity));
+    public ResponseEntity<UserInfoDto> showUserInfo(){
+        return ResponseEntity.ok(userService.getUserInfo());
     }
 
     //업데이트
     @PutMapping("/update")
-    public void updateUser(@SessionAttribute(name = LOGIN_INFO) LoginResponseDto loginUser,
-                           @RequestBody UpdateInfoDto updateUserInfo){
-        userService.updateUser(updateUserInfo, loginUser.getId());
+    public ResponseEntity<UserInfoDto> updateUser(@RequestBody UpdateInfoDto updateUserInfo){
+        return ResponseEntity.ok(userService.updateUser(updateUserInfo));
     }
 }
