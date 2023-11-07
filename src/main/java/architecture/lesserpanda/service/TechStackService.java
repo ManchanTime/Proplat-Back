@@ -33,6 +33,7 @@ public class TechStackService {
     }
 
     public List<TechStackInfoDto> findAllTech(){
+        System.out.println(" ============= ");
         return techStackRepository.findAll().stream()
                 .map(TechStackInfoDto::toTechStackPostInfoDto)
                 .collect(Collectors.toList());
