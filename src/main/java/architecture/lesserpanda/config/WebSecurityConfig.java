@@ -33,10 +33,11 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .cors();
-        http
                 .httpBasic().disable()
                 .csrf().disable()
+                .cors();
+
+        http
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 
                 .and()
@@ -54,6 +55,11 @@ public class WebSecurityConfig {
                 .antMatchers("/postId={postId}/reply-list").permitAll()
                 .antMatchers("/tech-list").permitAll()
                 .anyRequest().authenticated()
+
+                .and()
+                .headers()
+                .frameOptions()
+                .sameOrigin()
 
                 .and()
                 .apply(new JwtSecurityConfig(tokenProvider));
