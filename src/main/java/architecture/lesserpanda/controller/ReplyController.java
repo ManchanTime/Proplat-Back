@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.*;
 import static architecture.lesserpanda.dto.ReplyDto.*;
 import static architecture.lesserpanda.dto.MemberDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
-import static architecture.lesserpanda.config.SessionConstants.LOGIN_INFO;
 
 @RestController
 @RequiredArgsConstructor

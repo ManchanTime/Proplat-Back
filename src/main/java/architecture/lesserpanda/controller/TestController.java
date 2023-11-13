@@ -50,6 +50,7 @@ public class TestController {
         ClubStack clubStack1 = ClubStack.createClubStack(techStack1);
         TechStack techStack2 = techStackService.findTech(2L).orElseThrow();
         ClubStack clubStack2 = ClubStack.createClubStack(techStack2);
+
         Club club = Club.builder()
                 .name("test1_club_name")
                 .title("test1_club_title")
@@ -59,5 +60,20 @@ public class TestController {
         club.setClubStack(clubStack1);
         club.setClubStack(clubStack2);
         clubRepository.save(club);
+
+        TechStack techStack3 = techStackService.findTech(1L).orElseThrow();
+        ClubStack clubStack3 = ClubStack.createClubStack(techStack3);
+        TechStack techStack4 = techStackService.findTech(2L).orElseThrow();
+        ClubStack clubStack4 = ClubStack.createClubStack(techStack4);
+
+        Club club2 = Club.builder()
+                .name("test2_club_name")
+                .title("test2_club_title")
+                .content("test2_club_content")
+                .url("test2_image_url")
+                .build();
+        club2.setClubStack(clubStack3);
+        club2.setClubStack(clubStack4);
+        clubRepository.save(club2);
     }
 }

@@ -1,6 +1,6 @@
 package architecture.lesserpanda.service;
 
-import architecture.lesserpanda.config.SecurityUtil;
+import architecture.lesserpanda.global.util.SecurityUtil;
 import architecture.lesserpanda.entity.Member;
 import architecture.lesserpanda.entity.TechStack;
 import architecture.lesserpanda.entity.UserStack;

@@ -1,9 +1,8 @@
 package architecture.lesserpanda.service;
 
-import architecture.lesserpanda.config.SecurityUtil;
+import architecture.lesserpanda.global.util.SecurityUtil;
 import architecture.lesserpanda.entity.*;
 import architecture.lesserpanda.exception.PostNotFoundException;
-import architecture.lesserpanda.exception.UserNotFoundException;
 import architecture.lesserpanda.repository.PostRepository;
 import architecture.lesserpanda.repository.PostStackRepository;
 import architecture.lesserpanda.repository.TechStackRepository;

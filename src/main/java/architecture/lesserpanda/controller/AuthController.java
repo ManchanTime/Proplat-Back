@@ -2,13 +2,16 @@ package architecture.lesserpanda.controller;
 
 import architecture.lesserpanda.dto.MemberDto;
 import architecture.lesserpanda.dto.TokenDto;
+import architecture.lesserpanda.global.jwt.TokenProvider;
 import architecture.lesserpanda.service.authentication.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 import static architecture.lesserpanda.dto.MemberDto.*;
 import static org.springframework.http.ResponseEntity.*;
@@ -30,4 +33,5 @@ public class AuthController {
     public ResponseEntity<TokenDto> login(@RequestBody LoginRequestDto loginRequestDto){
         return ok(authService.login(loginRequestDto));
     }
+
 }

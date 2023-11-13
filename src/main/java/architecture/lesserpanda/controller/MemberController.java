@@ -1,19 +1,11 @@
 package architecture.lesserpanda.controller;
 
-import architecture.lesserpanda.config.SecurityUtil;
-import architecture.lesserpanda.entity.Member;
 import architecture.lesserpanda.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.MemberDto.*;
-import static architecture.lesserpanda.global.ExceptionStatement.*;
-import static architecture.lesserpanda.config.SessionConstants.*;
 
 @RestController
 @RequestMapping("/member")

@@ -1,4 +1,4 @@
-package architecture.lesserpanda.config;
+package architecture.lesserpanda.global.util;
 
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.Authentication;

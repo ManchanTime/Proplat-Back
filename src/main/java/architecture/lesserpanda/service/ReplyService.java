@@ -1,7 +1,6 @@
 package architecture.lesserpanda.service;
 
-import architecture.lesserpanda.config.SecurityUtil;
-import architecture.lesserpanda.dto.PostDto;
+import architecture.lesserpanda.global.util.SecurityUtil;
 import architecture.lesserpanda.entity.Member;
 import architecture.lesserpanda.entity.Post;
 import architecture.lesserpanda.entity.Reply;

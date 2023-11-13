@@ -104,6 +104,7 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
                         )
                 ))
                 .values());
+        System.out.println("content.size() = " + content.size());
         return new PageImpl<>(content, pageable, content.size());
     }
 

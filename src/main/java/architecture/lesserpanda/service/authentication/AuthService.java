@@ -1,7 +1,5 @@
 package architecture.lesserpanda.service.authentication;
 
-import architecture.lesserpanda.config.SecurityUtil;
-import architecture.lesserpanda.dto.MemberDto;
 import architecture.lesserpanda.dto.TokenDto;
 import architecture.lesserpanda.entity.Member;
 import architecture.lesserpanda.entity.TechStack;
@@ -10,7 +8,6 @@ import architecture.lesserpanda.global.jwt.TokenProvider;
 import architecture.lesserpanda.repository.MemberRepository;
 import architecture.lesserpanda.repository.TechStackRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.exception.GenericJDBCException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -63,13 +60,4 @@ public class AuthService {
         }
     }
 
-    //로그아웃
-    @Transactional
-    public void logout() {
-        //Token에서 로그인한 사용자 정보 get해 로그아웃 처리
-        SecurityUtil.getCurrentMemberId();
-        if (redisTemplate.opsForValue().get("JWT_TOKEN:" + admin.getLoginId()) != null) {
-            redisTemplate.delete("JWT_TOKEN:" + admin.getLoginId()); //Token 삭제
-        }
-    }
 }

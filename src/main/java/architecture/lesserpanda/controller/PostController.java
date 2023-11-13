@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import static architecture.lesserpanda.dto.PostDto.*;
 import static architecture.lesserpanda.dto.MemberDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
-import static architecture.lesserpanda.config.SessionConstants.*;
 
 @RestController
 @RequiredArgsConstructor
