@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import static architecture.lesserpanda.dto.MemberDto.*;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor

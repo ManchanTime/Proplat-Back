@@ -11,6 +11,7 @@ import static architecture.lesserpanda.dto.ReplyDto.*;
 import static architecture.lesserpanda.dto.MemberDto.*;
 import static architecture.lesserpanda.global.ExceptionStatement.*;
 
+@CrossOrigin("http://localhost:3000")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/postId={postId}")
