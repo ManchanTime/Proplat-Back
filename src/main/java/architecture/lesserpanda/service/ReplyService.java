@@ -44,7 +44,7 @@ public class ReplyService {
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Reply reply = Reply.toReplyEntity(replySaveRequestDto, post, member);
         Reply save = replyRepository.save(reply);
-        return ReplyGetResponseDto.toReplyGetResponseDto(save.getId(), member.getName(), save.getContent());
+        return ReplyGetResponseDto.toReplyGetResponseDto(save.getId(), member.getName(), save.getContent(), save.getDate());
     }
 
     //대댓글 작성
@@ -55,7 +55,7 @@ public class ReplyService {
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Reply rereply = Reply.toReReplyEntity(parent.getPost(), replySaveRequestDto, parent, member);
         Reply save = replyRepository.save(rereply);
-        return ReplyGetResponseDto.toReplyGetResponseDto(save.getId(), member.getName(), save.getContent());
+        return ReplyGetResponseDto.toReplyGetResponseDto(save.getId(), member.getName(), save.getContent(), save.getDate());
     }
 
     //댓글 리스트
@@ -78,6 +78,6 @@ public class ReplyService {
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Reply reply = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
         reply.change(replySaveRequestDto);
-        return ReplyGetResponseDto.toReplyGetResponseDto(replyId, member.getName(), reply.getContent());
+        return ReplyGetResponseDto.toReplyGetResponseDto(replyId, member.getName(), reply.getContent(), reply.getDate());
     }
 }

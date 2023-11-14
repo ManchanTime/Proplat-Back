@@ -55,13 +55,14 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
             //댓글
             if(replyTmp.getParent() == null){
                 ReplyGetResponseDto replyGetResponseDto =
-                        ReplyGetResponseDto.toReplyGetResponseDto(replyTmp.getId(), username, replyTmp.getContent());
+                        ReplyGetResponseDto.toReplyGetResponseDto(replyTmp.getId(), username, replyTmp.getContent(), replyTmp.getDate());
                 replyDtoMap.put(replyTmp.getId(), replyGetResponseDto);
             }
             //대댓글
             else{
                 ReplyGetResponseDto parent = replyDtoMap.get(replyTmp.getParent().getId());
-                ReReplyGetResponseDto child = ReReplyGetResponseDto.toReReplyGetResponseDto(replyTmp.getId(), username, replyTmp.getContent());
+                ReReplyGetResponseDto child =
+                        ReReplyGetResponseDto.toReReplyGetResponseDto(replyTmp.getId(), username, replyTmp.getContent(), replyTmp.getDate());
                 parent.getChild_replies().add(child);
             }
         }
