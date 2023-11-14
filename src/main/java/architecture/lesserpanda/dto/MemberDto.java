@@ -115,6 +115,7 @@ public class MemberDto {
     @Builder
     public static class UpdateInfoDto{
         private String name;
+        private String loginId;
         private String nickname;
         private String phoneNumber;
         private String introduce;
@@ -123,6 +124,7 @@ public class MemberDto {
         public static UpdateInfoDto toUpdateInfoDto(Member member, List<String> techStackInfoDtoList) {
             return UpdateInfoDto.builder()
                     .name(member.getName())
+                    .loginId(member.getLoginId())
                     .nickname(member.getNickname())
                     .phoneNumber(member.getPhoneNumber())
                     .introduce(member.getIntroduce())
