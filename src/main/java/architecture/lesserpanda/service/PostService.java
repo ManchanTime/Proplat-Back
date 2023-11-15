@@ -90,7 +90,6 @@ public class PostService {
     @Transactional
     public FindPostResponseDto updatePost(Long postId, SaveRequestDto saveRequestDto) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException(POST_NOT_FOUND));
-
         List<String> techList = saveRequestDto.getStackList();
         List<PostStack> postStackList = postStackRepository.findByPost(post);
         postStackRepository.deleteAll(postStackList);

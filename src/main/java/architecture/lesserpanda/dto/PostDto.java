@@ -48,22 +48,22 @@ public class PostDto {
         private List<TechStackInfoDto> postStackList = new ArrayList<>();
 
         @Builder
-        public FindPostResponseDto(Long postId, String title, String content, String postingTime,
+        public FindPostResponseDto(Long postId, String title, String content, LocalDateTime postingTime,
                                    boolean complete, List<TechStackInfoDto> postStackList) {
+            String dateTime = postingTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             this.postId = postId;
             this.title = title;
             this.content = content;
-            this.postingTime = postingTime;
+            this.postingTime = dateTime;
             this.complete = complete;
             this.postStackList = postStackList;
         }
 
         public static FindPostResponseDto toFindPostResponseDto(Post post, List<TechStackInfoDto> list){
-            String dateTime = post.getDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
             return FindPostResponseDto.builder()
                     .postId(post.getId())
                     .title(post.getTitle())
-                    .postingTime(dateTime)
+                    .postingTime(post.getDate())
                     .content(post.getContent())
                     .complete(post.getComplete())
                     .postStackList(list)

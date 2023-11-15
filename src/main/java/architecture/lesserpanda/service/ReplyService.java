@@ -49,13 +49,13 @@ public class ReplyService {
 
     //대댓글 작성
     @Transactional
-    public ReplyGetResponseDto saveReReply(Long replyId, ReplySaveRequestDto replySaveRequestDto){
+    public ReReplyGetResponseDto saveReReply(Long replyId, ReplySaveRequestDto replySaveRequestDto){
         Long currentMemberId = SecurityUtil.getCurrentMemberId();
         Reply parent = replyRepository.findById(replyId).orElseThrow(() -> new ReplyNotFoundException(REPLY_NOT_FOUND));
         Member member = memberRepository.findById(currentMemberId).orElseThrow(() -> new UserNotFoundException(USER_NOT_FOUND));
         Reply rereply = Reply.toReReplyEntity(parent.getPost(), replySaveRequestDto, parent, member);
         Reply save = replyRepository.save(rereply);
-        return ReplyGetResponseDto.toReplyGetResponseDto(save.getId(), member.getName(), save.getContent(), save.getDate());
+        return ReReplyGetResponseDto.toReReplyGetResponseDto(save.getId(), member.getName(), save.getContent(), save.getDate());
     }
 
     //댓글 리스트

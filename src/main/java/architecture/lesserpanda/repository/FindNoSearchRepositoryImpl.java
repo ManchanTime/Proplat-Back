@@ -47,6 +47,11 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
                 .from(reply)
                 .join(reply.member, member)
                 .where(reply.post.id.eq(postId))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(
+                        reply.date.asc()
+                )
                 .fetch();
         Map<Long, ReplyGetResponseDto> replyDtoMap = new HashMap<>();
         for(Tuple tuple : replyTuples){
@@ -81,6 +86,8 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
                 .from(club)
                 .innerJoin(club.clubStackList, clubStack)
                 .innerJoin(clubStack.techStack, techStack)
+                        .offset(pageable.getOffset())
+                        .limit(pageable.getPageSize())
                 .stream()
                 .collect(groupingBy(
                         tuple -> tuple.get(club.id), // Club ID로 그룹화
@@ -105,7 +112,6 @@ public class FindNoSearchRepositoryImpl extends QuerydslRepositorySupport implem
                         )
                 ))
                 .values());
-        System.out.println("content.size() = " + content.size());
         return new PageImpl<>(content, pageable, content.size());
     }
 

@@ -34,7 +34,7 @@ public class ReplyController {
 
     //대댓글 작성
     @PostMapping("/rereply-save")
-    public ResponseEntity<ReplyGetResponseDto> reReplySave(@RequestParam("replyId") Long replyId,
+    public ResponseEntity<ReReplyGetResponseDto> reReplySave(@RequestParam("replyId") Long replyId,
                                            @RequestBody ReplySaveRequestDto replySaveRequestDto){
         return ResponseEntity.ok(replyService.saveReReply(replyId, replySaveRequestDto));
     }

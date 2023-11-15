@@ -34,11 +34,16 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implemen
     @Override
     public Page<FindPostResponseDto> postListResponseDtoPage(String keyword, Pageable pageable){
         List<FindPostResponseDto> content = new ArrayList<>(jpaQueryFactory
-                .select(post.id, post.title, post.content, post.complete, techStack.name, techStack.type)
+                .select(post.id, post.title, post.content, post.complete, post.date, techStack.name, techStack.type)
                 .from(post)
                 .innerJoin(post.postStackList, postStack)
                 .innerJoin(postStack.techStack, techStack)
                 .where(containTitle(keyword), containContent(keyword))
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .orderBy(
+                        post.date.asc()
+                )
                 .stream()
                 .collect(groupingBy(
                         tuple -> tuple.get(post.id), // Post ID로 그룹화
@@ -48,6 +53,7 @@ public class SearchPostRepositoryImpl extends QuerydslRepositorySupport implemen
                                         .postId(tuples.get(0).get(post.id))
                                         .title(tuples.get(0).get(post.title))
                                         .content(tuples.get(0).get(post.content))
+                                                .postingTime(tuples.get(0).get(post.date))
                                         .complete(Boolean.TRUE.equals(tuples.get(0).get(post.complete)))
                                         .postStackList(tuples.stream()
                                                 .map(t ->
